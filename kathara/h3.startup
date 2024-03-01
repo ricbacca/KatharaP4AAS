@@ -1,0 +1,4 @@
+ip address add 10.0.2.1/24 dev eth0
+ip link set eth0 address 00:02:00:00:01:00
+route add default gw 10.0.2.254 dev eth0
+arp -i eth0 -s 10.0.2.254 00:02:00:00:01:ff
