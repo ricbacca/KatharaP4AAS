@@ -133,6 +133,20 @@ control MyIngress(inout headers hdr,
         support_timeout = true;
         default_action = drop();
     }
+    
+    table ipv4_exact {
+        key = {
+            hdr.ipv4.dstAddr: exact;
+        }
+        actions = {
+            ipv4_forward;
+            drop;
+            NoAction;
+        }
+        size = 1024;
+        support_timeout = true;
+        default_action = NoAction();
+    }
 
     table ipv4_drop {
         key = {
@@ -149,9 +163,12 @@ control MyIngress(inout headers hdr,
 
     apply {
         if (hdr.ipv4.isValid()) {
-            ipv4_lpm.apply();
             ipv4_drop.apply();
+            if (!ipv4_exact.apply().hit) {
+           	ipv4_lpm.apply();
+            }
 
+           
             bit<32> flow;
             bit<32> flow_opp;
             bit<48> last_pkt_cnt;
