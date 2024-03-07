@@ -1,8 +1,0 @@
-table_add ipv4_exact ipv4_forward 10.0.3.1 => 00:03:00:00:01:00 1
-table_add ipv4_exact ipv4_forward 10.0.3.2 => 00:03:00:00:02:00 1
-table_add ipv4_lpm ipv4_forward 10.0.2.0/24 => 00:00:00:00:00:03 2
-table_add ipv4_lpm ipv4_forward 10.0.1.0/24 => 00:00:00:00:00:03 2
-
-table_add arp_exact arp_reply 10.0.3.1 => 00:00:00:00:00:04
-table_add arp_exact arp_reply 10.0.3.2 => 00:00:00:00:00:04
-EOF

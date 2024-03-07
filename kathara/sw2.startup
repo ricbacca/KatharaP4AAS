@@ -1,11 +1,8 @@
 ip link set eth0 address 00:00:00:00:00:04
 ip link set eth1 address 00:00:00:00:00:05
+ip link set eth2 address 00:00:00:00:00:07
 
-p4c program.p4
+ip address add 100.0.1.3/24 dev eth2
+arp -i eth2 -s 100.0.1.4 00:00:00:00:02:02
 
-simple_switch -i 1@eth0 -i 2@eth1 --nanolog ipc:///tmp/bm-log.ipc program.json &
-
-while [[ $(pgrep simple_switch) -eq 0 ]]; do sleep 1; done
-until simple_switch_CLI <<< "help"; do sleep 1; done
-
-simple_switch_CLI <<< $(cat commands.txt)
+echo 'simple_switch_grpc --no-p4 -i 1@eth0 -i 2@eth1 --device-id 2 -- --grpc-server-addr 100.0.1.3:50052 --cpu-port 255'

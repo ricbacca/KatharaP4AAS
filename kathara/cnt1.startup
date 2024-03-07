@@ -1,0 +1,8 @@
+ip address add 100.0.1.2/24 dev eth0
+ip link set eth0 address 00:00:00:00:01:01
+arp -i eth0 -s 100.0.1.1 00:00:00:00:00:06
+
+echo $'nameserver 8.8.8.8\nnameserver 8.8.4.4' >> /etc/resolv.conf
+
+# cd p4runtime-go-client/
+# go run ./main.go -n 1 -config ./config/net-config.yml -topology ./config/net-topo.json -verbose
