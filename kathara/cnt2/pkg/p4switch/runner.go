@@ -15,17 +15,15 @@ import (
 )
 
 const (
-	defaultPort = 50050
-	defaultAddr = "100.0.1.3"
 	defaultWait = 250 * time.Millisecond
 )
 
-func CreateSwitch(deviceID uint64, configName string, ports int, certFile string) *GrpcSwitch {
+func CreateSwitch(deviceID uint64, configName string, ports int, certFile string, address string) *GrpcSwitch {
 	return &GrpcSwitch{
 		id:                deviceID,
 		initialConfigName: configName,
 		ports:             ports,
-		addr:              fmt.Sprintf("%s:%d", defaultAddr, defaultPort+deviceID),
+		addr:              address,
 		log:               log.WithField("ID", deviceID),
 		certFile:          certFile,
 	}

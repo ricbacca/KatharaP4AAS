@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -48,13 +49,13 @@ const (
 var errorMessage string
 var successMessage string
 
-var allSwitches []*p4switch.GrpcSwitch
+var Switch *p4switch.GrpcSwitch
 var programNames []string
 var topologyFilePath string
 var ctx context.Context
 
-func StartServer(switches []*p4switch.GrpcSwitch, topology string, ctx_dummy context.Context) {
-	allSwitches = switches
+func StartServer(sw *p4switch.GrpcSwitch, topology string, ctx_dummy context.Context, port int) {
+	Switch = sw
 	topologyFilePath = topology
 	ctx = ctx_dummy
 
@@ -68,8 +69,8 @@ func StartServer(switches []*p4switch.GrpcSwitch, topology string, ctx_dummy con
 
 	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir(serverPath+"web"))))
 
-	log.Infof("Server listening on localhost:4444")
-	err := http.ListenAndServe("0.0.0.0:4444", nil)
+	log.Infof(fmt.Sprintf("Server listening on localhost:%d", port))
+	err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), nil)
 	if errors.Is(err, http.ErrServerClosed) {
 		log.Infof("server closed\n")
 	} else if err != nil {
@@ -121,14 +122,12 @@ func getRoot(w http.ResponseWriter, r *http.Request) {
 	// Create variable for the rootPage
 	var swData []SwitchServerData
 
-	for _, sw := range allSwitches {
-		swData = append(swData, SwitchServerData{
-			Name:           sw.GetName(),
-			ProgramName:    sw.GetProgramName(),
-			ProgramActions: getDescribersForSwitch(sw),
-			InstalledRules: sw.GetInstalledRules(),
-		})
-	}
+	swData = append(swData, SwitchServerData{
+		Name:           Switch.GetName(),
+		ProgramName:    Switch.GetProgramName(),
+		ProgramActions: getDescribersForSwitch(Switch),
+		InstalledRules: Switch.GetInstalledRules(),
+	})
 
 	data := RootPageData{
 		Switches:       swData,
@@ -441,10 +440,8 @@ func executeProgram(w http.ResponseWriter, r *http.Request) {
 }
 
 func getSwitchByName(name string) *p4switch.GrpcSwitch {
-	for _, sw := range allSwitches {
-		if sw.GetName() == name {
-			return sw
-		}
+	if Switch.GetName() == name {
+		return Switch
 	}
 	return nil
 }

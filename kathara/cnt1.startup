@@ -4,5 +4,4 @@ arp -i eth0 -s 100.0.1.1 00:00:00:00:00:06
 
 echo $'nameserver 8.8.8.8\nnameserver 8.8.4.4' >> /etc/resolv.conf
 
-# cd p4runtime-go-client/
-# go run ./main.go -n 1 -config ./config/net-config.yml -topology ./config/net-topo.json -verbose
+# go run ./main.go -id 1 -cp 3333 -sw 100.0.1.1:50051 -config ./config/net-config.yml -topology ./config/net-topo.json -verbose

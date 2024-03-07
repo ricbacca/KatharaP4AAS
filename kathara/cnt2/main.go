@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"time"
 
 	"github.com/antoninbas/p4runtime-go-client/pkg/p4switch"
 	"github.com/antoninbas/p4runtime-go-client/pkg/server"
@@ -11,22 +10,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const (
-	defaultPort     = 50050
-	defaultAddr     = "100.0.1.1"
-	defaultWait     = 250 * time.Millisecond
-	packetCounter   = "MyIngress.port_packets_in"
-	packetCountWarn = 20
-	packetCheckRate = 5 * time.Second
-	p4topology      = "./config/topology.json"
-)
-
 func main() {
 
 	// Inizializza variabili "flag" che vengono passate come argomento
-
-	var nDevices int
-	flag.IntVar(&nDevices, "n", 1, "Number of devices")
+	var deviceId int
+	flag.IntVar(&deviceId, "id", 1, "DeviceId")
+	var cntPort int
+	flag.IntVar(&cntPort, "cp", 3333, "cntPort")
+	var swAddr string
+	flag.StringVar(&swAddr, "sw", "100.0.1.1:50050", "swAddr")
 	var verbose bool
 	flag.BoolVar(&verbose, "verbose", false, "Enable verbose mode with debug log messages")
 	var trace bool
@@ -45,29 +37,21 @@ func main() {
 	if trace {
 		log.SetLevel(log.TraceLevel)
 	}
-	log.Infof("Starting %d devices", nDevices)
 
 	ctx, cancel := context.WithCancel(context.Background())
-	switchs := make([]*p4switch.GrpcSwitch, 0, nDevices)
 
-	for i := 0; i < nDevices; i++ {
-		sw := p4switch.CreateSwitch(uint64(i+1), configName, 3, certFile)
+	sw := p4switch.CreateSwitch(uint64(deviceId), configName, 3, certFile, swAddr)
 
-		if err := sw.RunSwitch(ctx); err != nil {
-
-			sw.GetLogger().Errorf("Cannot start")
-			log.Errorf("%v", err)
-
-		} else {
-			switchs = append(switchs, sw)
-		}
-
+	if err := sw.RunSwitch(ctx); err != nil {
+		sw.GetLogger().Errorf("Cannot start")
+		log.Errorf("%v", err)
 	}
-	if len(switchs) == 0 {
-		log.Info("No switches started")
+
+	if sw == nil {
+		log.Info("Switch not started !")
 		return
 	}
 
-	server.StartServer(switchs, topologyName, ctx)
+	server.StartServer(sw, topologyName, ctx, cntPort)
 	cancel()
 }
