@@ -4,3 +4,7 @@ route add default gw 10.0.2.254 dev eth0
 
 arp -s 10.0.2.254 00:00:00:00:00:02
 arp -s 10.0.2.1 00:00:00:00:00:02
+
+cp sshd_config /etc/ssh/
+echo -e "111111\n111111" | passwd root
+service ssh start
