@@ -2,7 +2,7 @@ ip address add 100.0.1.2/24 dev eth0
 ip link set eth0 address 00:00:00:00:01:01
 
 # MAC and IP of SW1
-arp -i eth0 -s 100.0.1.1 00:00:00:00:00:06
+arp -i eth0 -s 100.0.1.1 00:00:00:00:00:03
 # MAC and IP of AAS Project
 arp -i eth0 -s 100.0.1.5 00:00:00:00:00:08
 

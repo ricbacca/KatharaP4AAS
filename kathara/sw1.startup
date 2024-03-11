@@ -1,10 +1,9 @@
 ip link set eth0 address 00:00:00:00:00:01
 ip link set eth1 address 00:00:00:00:00:02
 ip link set eth2 address 00:00:00:00:00:03
-ip link set eth3 address 00:00:00:00:00:06
 
 # Useful for connection to CNT1 and AAS Project
-ip address add 100.0.1.1/24 dev eth3
+ip address add 100.0.1.1/24 dev eth2
 
 # MAC and IP of CNT1
 arp -s 100.0.1.2 00:00:00:00:01:01
