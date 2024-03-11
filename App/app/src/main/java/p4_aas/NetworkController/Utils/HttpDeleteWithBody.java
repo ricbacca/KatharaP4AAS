@@ -12,24 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package p4_aas.RyuController.Models.RuleImpl;
+package p4_aas.NetworkController.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import java.net.URI;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Rule {
-    public List<Rules> rules = new ArrayList<>();
-    public List<Rules> getRules() {
-        return rules;
+public class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
+    public static final String METHOD_NAME = "DELETE";
+ 
+    public String getMethod() {
+        return METHOD_NAME;
     }
-    public void setRules(List<Rules> rules) {
-        this.rules = rules;
+ 
+    public HttpDeleteWithBody(final String uri) {
+        super();
+        setURI(URI.create(uri));
     }
-    @Override
-    public String toString() {
-        return "Rule [rules=" + rules + "]";
+ 
+    public HttpDeleteWithBody(final URI uri) {
+        super();
+        setURI(uri);
+    }
+ 
+    public HttpDeleteWithBody() {
+        super();
     }
 }

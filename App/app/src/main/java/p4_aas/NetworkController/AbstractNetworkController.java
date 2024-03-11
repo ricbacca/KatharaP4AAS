@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package p4_aas.RyuController;
+package p4_aas.NetworkController;
 
 import java.io.IOException;
 
@@ -25,12 +25,12 @@ import org.apache.http.impl.client.HttpClients;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-public abstract class AbstractController {
+public abstract class AbstractNetworkController {
     protected static final int HTTP_OK = 200;
     CloseableHttpClient apacheClient;
     ObjectMapper objMap;
 
-    public AbstractController() {
+    public AbstractNetworkController() {
         this.apacheClient = HttpClients.createDefault();
         this.objMap = new ObjectMapper();
     }

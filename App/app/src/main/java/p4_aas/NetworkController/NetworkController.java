@@ -12,35 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package p4_aas.RyuController;
+package p4_aas.NetworkController;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import p4_aas.NetworkController.Utils.HttpDeleteWithBody;
+import p4_aas.NetworkController.Utils.Utils;
 
-import p4_aas.RyuController.Utils.HttpDeleteWithBody;
+public class NetworkController extends AbstractNetworkController {
+    Utils utils = new Utils();
 
-public class Controller extends AbstractController {
+    public SubmodelElement[] getRules(String URL) {
+        System.out.println(URL);
+        List<String> resultList = new LinkedList<>();
+        List<SubmodelElement> finalRes = new LinkedList<>();
+        try {
+            CloseableHttpResponse resp = this.apacheClient.execute(new HttpGet(URL));
+            resultList = utils.jsonToList(EntityUtils.toString(resp.getEntity()));
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
+        resultList.forEach(el -> {
+            finalRes.add(utils.createProperty("Rule" , el));
+        });
 
-    /**
-     * @param URL
-     * @return String response of Get request without serialization required
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    public String makeRequestWithoutSerialize(String URL) throws IOException, InterruptedException {
-        CloseableHttpResponse resp = this.apacheClient.execute(new HttpGet(URL));
-        return EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
+        return finalRes.toArray(new SubmodelElement[finalRes.size()]);
     }
     
     /**
@@ -57,21 +66,6 @@ public class Controller extends AbstractController {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * @param URL
-     * @param switchNumber 1 o 2
-     * @param role for the controller (Master or Slave)
-     * @return statusCode from Post request
-     * @throws HttpResponseException 
-     */
-    public Integer setControllerRole(String URL, int switchNumber, String role) throws HttpResponseException {
-        ObjectNode jsonBody = objMap.createObjectNode();
-        jsonBody.put("dpid", switchNumber);
-        jsonBody.put("role", role);
-
-        return this.postRequest(URL, jsonBody);
     }
 
     /**

@@ -30,7 +30,7 @@ public class Utils {
     public static final int ALL_FLOWS_OUTPUT = 9;
     public static final int GET_ROLE_OUTPUT = 2;
     public static final int SET_ROLE_OUTPUT = 1;
-    public static final int GET_FIREWALL_RULES = 6;
+    public static final int GET_FIREWALL_RULES = 10;
 
     /**
      * @param values Map of String and ValueType (String, Integer, Boolean)

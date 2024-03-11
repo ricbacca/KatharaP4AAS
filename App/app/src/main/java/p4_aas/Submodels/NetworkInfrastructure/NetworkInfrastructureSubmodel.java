@@ -15,22 +15,15 @@
 package p4_aas.Submodels.NetworkInfrastructure;
 
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-
 import p4_aas.Submodels.AbstractSubmodel;
 
 import java.util.List;
-import java.util.Map;
 
 public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
 
-    private NetworkInfrastructureLambda lambdaProvider;
 
     public NetworkInfrastructureSubmodel() {
         super();
-        this.lambdaProvider = new NetworkInfrastructureLambda(this.getRyuController(), this.getUtils());
     }
 
     @Override
@@ -38,61 +31,6 @@ public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
 		Submodel switches = new Submodel();
         Submodel controllers = new Submodel();
 
-		switches.setIdShort("Switches");
-        switches.addSubmodelElement(switchesOperation());
-
-        controllers.setIdShort("SelectControllers");
-        controllers.addSubmodelElement(setOpenController());
-        controllers.addSubmodelElement(setClosedController());
-        controllers.addSubmodelElement(setSelectiveController());
-
 		return List.of(switches, controllers);
 	}
-
-    private Operation switchesOperation() {
-        Operation switches = new Operation("SwitchesInfo");
-        switches.setOutputVariables(getUtils().getOperationVariables(2, "Output"));
-        switches.setWrappedInvokable(lambdaProvider.getSwitchesNumber());
-
-        return switches;
-    }
-
-    private Operation setOpenController() {
-        Operation setController = new Operation("OpenController");
-        setController.setDescription(new LangStrings("Italian", "Sw1 and Sw2 are simple switches."));
-        setController.setInputVariables(getUtils().getCustomInputVariables(
-            Map.of(
-                "Controller", ValueType.Boolean
-            )));
-
-        setController.setOutputVariables(getUtils().getOperationVariables(1, "Output"));
-        setController.setWrappedInvokable(lambdaProvider.setSimpleSwitchControllers());
-
-        return setController;
-    }
-
-    private Operation setClosedController() {
-        Operation setController = new Operation("ClosedController");
-        setController.setDescription(new LangStrings("Italian", "Sw2 and Sw2 talks only with their hosts."));
-        setController.setInputVariables(getUtils().getCustomInputVariables(
-            Map.of(
-                "Controller", ValueType.Boolean
-            )));
-
-        setController.setOutputVariables(getUtils().getOperationVariables(1, "Output"));
-        setController.setWrappedInvokable(lambdaProvider.setClosedControllers());
-
-        return setController;
-    }
-
-    private Operation setSelectiveController() {
-        Operation setController = new Operation("SelectiveController");
-        setController.setInputVariables(getUtils().getCustomInputVariables(Map.of(
-            "Controller", ValueType.Boolean
-            )));
-        setController.setOutputVariables(getUtils().getOperationVariables(1, "Output"));
-        setController.setWrappedInvokable(lambdaProvider.setSelectiveControllers());
-
-        return setController;
-    }
 }

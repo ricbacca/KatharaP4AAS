@@ -20,14 +20,14 @@ import p4_aas.AssetShells.IShell;
 import p4_aas.AssetShells.Machine;
 import p4_aas.AssetShells.NetworkControlPlane;
 import p4_aas.AssetShells.NetworkInfrastructure;
-import p4_aas.RyuController.Controller;
+import p4_aas.NetworkController.NetworkController;
 
 import java.util.List;
 
 public class App {
     private final static String manual = "https://www.plattform-i40.de/IP/Redaktion/EN/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.pdf?__blob=publicationFile&v=1";
     private final static String version = "1.0.0";
-    private final static Controller client = new Controller();
+    private final static NetworkController client = new NetworkController();
     public static void main(String[] args) {
         waitForRegistry();
 
@@ -80,6 +80,7 @@ public class App {
     /**
      * Polling on Registry Url, waiting for a positive response to proceed on.
      */
+    
     private static void waitForRegistry() {
         String URL = "http://100.0.2.1:4000/registry/api/v1/registry";
 

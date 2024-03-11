@@ -14,7 +14,7 @@
 
 package p4_aas.Submodels;
 
-import p4_aas.RyuController.Controller;
+import p4_aas.NetworkController.NetworkController;
 import p4_aas.Submodels.Utils.Utils;
 
 /**
@@ -22,18 +22,18 @@ import p4_aas.Submodels.Utils.Utils;
  */
 public abstract class AbstractSubmodel implements ISubmodel {
     private Utils utils;
-    private Controller ryuController;
+    private NetworkController ryuController;
 
     public AbstractSubmodel() {
         this.utils = new Utils();
-        this.ryuController = new Controller();
+        this.ryuController = new NetworkController();
     }
 
     public Utils getUtils() {
         return utils;
     }
 
-    public Controller getRyuController() {
+    public NetworkController getRyuController() {
         return ryuController;
     }
 
