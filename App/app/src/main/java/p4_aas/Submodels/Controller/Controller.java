@@ -15,7 +15,9 @@
 package p4_aas.Submodels.Controller;
 
 import java.util.List;
+import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 
 import p4_aas.NetworkController.Utils.ApiEnum;
@@ -33,7 +35,7 @@ public class Controller extends AbstractSubmodel {
     public Controller(int controllerNumber) {
         super();
         this.controllerId = controllerNumber;
-        this.lambdaProvider = new ControllerLambda();
+        this.lambdaProvider = new ControllerLambda(this.getNetworkController());
     }
 
     @Override
@@ -43,17 +45,26 @@ public class Controller extends AbstractSubmodel {
 		cntSubmodel.setIdShort("Controller" + controllerId);
 
         cntSubmodel.addSubmodelElement(getRules());
+        cntSubmodel.addSubmodelElement(deleteRules());
 
 		return List.of(cntSubmodel);
     }
 
     private Operation getRules() {
-        Operation getRules = new Operation("GetFirewallRules");
+        Operation getRules = new Operation("GetSwitchRules");
         getRules.setOutputVariables(getUtils().getOperationVariables(Utils.GET_FIREWALL_RULES, "Output"));
 
-        getRules.setWrappedInvokable(lambdaProvider.getFirewallRules(controllerId == 1 ? ApiEnum.GETFIREWALLRULES_SW1.url :
-                                                                                            ApiEnum.GETFIREWALLRULES_SW2.url));
-
+        getRules.setWrappedInvokable(lambdaProvider.getRules(controllerId == 1 ? ApiEnum.GETRULES_SW1.url :
+                                                                                            ApiEnum.GETRULES_SW2.url));
         return getRules;
+    }
+
+    private Operation deleteRules() {
+        Operation deleteRules = new Operation("DeleteSwitchRules");
+        deleteRules.setInputVariables(getUtils().getCustomInputVariables(Map.of("ruleID", ValueType.Integer)));
+
+        deleteRules.setWrappedInvokable(lambdaProvider.deleteRules(controllerId == 1 ? ApiEnum.DELETERULES_SW1.url :
+                                                                                          ApiEnum.DELETERULES_SW2.url));
+        return deleteRules;
     }
 }

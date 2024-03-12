@@ -15,22 +15,54 @@
 package p4_aas.Submodels.NetworkInfrastructure;
 
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.AASLambdaPropertyHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+
+import p4_aas.NetworkController.Utils.ApiEnum;
 import p4_aas.Submodels.AbstractSubmodel;
 
 import java.util.List;
 
 public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
 
+    private NetworkInfrastructureLambda lambdaProvider;
 
     public NetworkInfrastructureSubmodel() {
         super();
+        this.lambdaProvider = new NetworkInfrastructureLambda(this.getNetworkController());
     }
 
     @Override
     public List<Submodel> createSubmodel() {
-		Submodel switches = new Submodel();
-        Submodel controllers = new Submodel();
+		Submodel swPrograms = new Submodel();
+        swPrograms.setIdShort("SwPrograms");
 
-		return List.of(switches, controllers);
+        swPrograms.addSubmodelElement(getRunningProgramSw1());
+        swPrograms.addSubmodelElement(getRunningProgramSw2());
+
+		return List.of(swPrograms);
 	}
+
+    private Property getRunningProgramSw1() {
+        Property currentProgram = new Property("Sw2CurrentProgram", ValueType.String);
+
+		AASLambdaPropertyHelper.setLambdaValue(currentProgram, () -> {
+			return lambdaProvider.getCurrentProgram(ApiEnum.CURRENTPROGRAM_SW1.url);
+		}, null);
+
+        return currentProgram;
+    }
+
+    private Property getRunningProgramSw2() {
+        Property currentProgram = new Property("Sw1CurrentProgram", ValueType.String);
+
+		AASLambdaPropertyHelper.setLambdaValue(currentProgram, () -> {
+			return lambdaProvider.getCurrentProgram(ApiEnum.CURRENTPROGRAM_SW2.url);
+		}, null);
+
+        return currentProgram;
+    }
+
+
 }

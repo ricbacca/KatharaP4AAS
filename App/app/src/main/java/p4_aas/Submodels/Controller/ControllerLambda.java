@@ -2,6 +2,9 @@ package p4_aas.Submodels.Controller;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.math.*;
+
+import org.apache.http.client.HttpResponseException;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 import p4_aas.NetworkController.NetworkController;
@@ -9,19 +12,24 @@ import p4_aas.NetworkController.NetworkController;
 public class ControllerLambda {
     private NetworkController client;
 
-    public ControllerLambda() {
-        this.client = new NetworkController();
+    public ControllerLambda(NetworkController client) {
+        this.client = client;
     }
 
-    /**
-     * 
-     * @param url controller IP
-     * @return actual firewall rules from controller
-     */
-    public Function<Map<String, SubmodelElement>, SubmodelElement[]> getFirewallRules(String url) {
+    public Function<Map<String, SubmodelElement>, SubmodelElement[]> getRules(String url) {
         return (args) -> {
-            SubmodelElement[] res = client.getRules(url);
-            return res;
+            return client.getRules(url);
+        };
+    }
+
+    public Function<Map<String, SubmodelElement>, SubmodelElement[]> deleteRules(String url) {
+        return (args) -> {
+            try {
+                client.deleteRule(url + (BigInteger) args.get("ruleID").getValue());
+            } catch (HttpResponseException e) {
+                e.printStackTrace();
+            }
+            return new SubmodelElement[]{};
         };
     }
 }

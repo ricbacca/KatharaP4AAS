@@ -18,23 +18,17 @@ public enum ApiEnum {
     SW1("http://100.0.1.2:3333"),
     SW2("http://100.0.1.4:4444"),
 
-    GETALLSWITCHES("/stats/switches"),
+    GETRULES_SW1(SW1.url + "/getRules?switch=s1"),
 
-    GETAGGREGATEFLOWSTATS("/stats/aggregateflow/"),
+    GETRULES_SW2(SW2.url + "/getRules?switch=s2"),
 
-    GETALLFLOWSTATS("/stats/flow/"),
+    DELETERULES_SW1(SW1.url + "/removeRule?switch=s1&number="),
 
-    GETROLE("/stats/role/"),
+    DELETERULES_SW2(SW2.url + "/removeRule?switch=s2&number="),
 
-    SETROLE("/stats/role"),
+    CURRENTPROGRAM_SW1(SW1.url + "/getCurrentProgram?switch=s1"),
 
-    FIREWALL_DEFAULT_DENY("/firewall/module/enable/000000000000000"),
-
-    FIREWALL_DEFAULT_ACCEPT("/firewall/module/disable/000000000000000"),
-
-    GETFIREWALLRULES_SW1(SW1.url + "/getRules?switch=s1"),
-
-    GETFIREWALLRULES_SW2(SW2.url + "/getRules?switch=s2");
+    CURRENTPROGRAM_SW2(SW2.url + "/getCurrentProgram?switch=s2");
 
     public final String url;
 

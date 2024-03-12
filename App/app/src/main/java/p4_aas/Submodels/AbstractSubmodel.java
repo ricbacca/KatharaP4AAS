@@ -22,19 +22,19 @@ import p4_aas.Submodels.Utils.Utils;
  */
 public abstract class AbstractSubmodel implements ISubmodel {
     private Utils utils;
-    private NetworkController ryuController;
+    private NetworkController client;
 
     public AbstractSubmodel() {
         this.utils = new Utils();
-        this.ryuController = new NetworkController();
+        this.client = new NetworkController();
     }
 
     public Utils getUtils() {
         return utils;
     }
 
-    public NetworkController getRyuController() {
-        return ryuController;
+    public NetworkController getNetworkController() {
+        return client;
     }
 
 }
