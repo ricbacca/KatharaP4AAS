@@ -62,6 +62,8 @@ func StartServer(sw *p4switch.GrpcSwitch, topology string, ctx_dummy context.Con
 	http.HandleFunc("/", getRoot)
 	http.HandleFunc("/getRules", getRules)
 	http.HandleFunc("/getCurrentProgram", getCurrentProgram)
+	http.HandleFunc("/getAvailablePrograms", getAvailablePrograms)
+	http.HandleFunc("/getRuleDescriber", getRuleDescriber)
 	http.HandleFunc("/addRule", addRule)
 	http.HandleFunc("/removeRule", removeRule)
 	http.HandleFunc("/executeProgram", executeProgram)
@@ -92,6 +94,53 @@ func getRules(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonData, err := json.Marshal(sw.GetInstalledRules())
+	if err != nil {
+		http.Error(w, "Errore durante la codifica JSON", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonData)
+}
+
+func getRuleDescriber(w http.ResponseWriter, r *http.Request) {
+	swName := r.URL.Query().Get("switch")
+
+	// Getting gRPC switch by name passed in URL
+	sw := getSwitchByName(swName)
+	if sw == nil {
+		errorMessage = "Failed to add entry: switch not found"
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	jsonData, err := json.Marshal(getDescribersForSwitch(sw))
+	if err != nil {
+		http.Error(w, "Errore durante la codifica JSON", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonData)
+}
+
+func getAvailablePrograms(w http.ResponseWriter, r *http.Request) {
+	if programNames == nil {
+		files, err := ioutil.ReadDir(pathP4folder)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, file := range files {
+			fileName := file.Name()
+			if !file.IsDir() && strings.HasSuffix(fileName, ".p4") {
+				p4ProgramName := fileName[:len(fileName)-len(".p4")]
+				programNames = append(programNames, p4ProgramName)
+			}
+		}
+	}
+
+	jsonData, err := json.Marshal(programNames)
 	if err != nil {
 		http.Error(w, "Errore durante la codifica JSON", http.StatusInternalServerError)
 		return
