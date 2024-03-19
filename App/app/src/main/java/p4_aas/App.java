@@ -32,43 +32,43 @@ public class App {
         waitForRegistry();
 
         IShell networkInfrastructure = new NetworkInfrastructure(
-            6001, 
+            StaticProperties.NetworkInfrastructurePort, 
             "Network Infrastructure", 
             "org.unibo.aas.networkInfrastructure", 
             AssetKind.INSTANCE);
 
         IShell networkControlPlane = new NetworkControlPlane(
-            6002, 
+            StaticProperties.NetworkControlPlanePort, 
             "Network Control Plane", 
             "org.unibo.aas.networkControlPlane", 
             AssetKind.INSTANCE);
 
         IShell machineOne = new Machine(
-            6003,
+            StaticProperties.MachineOnePort,
             "Machine1",
             "org.unibo.aas.machineOne",
             AssetKind.INSTANCE,
             manual,
             version,
-            List.of("10.0.1.1", "10.0.1.2"));
+            List.of(StaticProperties.Host1, StaticProperties.Host2));
 
         IShell machineTwo = new Machine(
-            6004,
+            StaticProperties.MachineTwoPort,
             "Machine2",
             "org.unibo.aas.machineTwo",
             AssetKind.INSTANCE,
             manual,
             version,
-            List.of("10.0.2.1", "10.0.2.2"));
+            List.of(StaticProperties.Host3, StaticProperties.Host4));
 
         IShell machineThree = new Machine(
-            6005,
+            StaticProperties.MachineThreePort,
             "Machine3",
             "org.unibo.aas.machineThree",
             AssetKind.INSTANCE,
             manual,
             version,
-            List.of("10.0.3.1", "10.0.3.2"));
+            List.of(StaticProperties.Host5, StaticProperties.Host6));
 
         networkInfrastructure.createAndStartServlet();
         networkControlPlane.createAndStartServlet();
@@ -82,10 +82,8 @@ public class App {
      */
     
     private static void waitForRegistry() {
-        String URL = "http://100.0.2.1:4000/registry/api/v1/registry";
-
-        System.out.print("Waiting for Registry at 100.0.2.1:4000");
-        while(!client.isServerAvailable(URL)) {
+        System.out.print("Waiting for Registry at " + StaticProperties.REGISTRY_POLLING_IP);
+        while(!client.isServerAvailable(StaticProperties.REGISTRY_POLLING_IP)) {
             System.out.print(".");
             try {
                 Thread.sleep(1000);

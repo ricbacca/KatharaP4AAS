@@ -25,6 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 
+import p4_aas.StaticProperties;
 import p4_aas.Infrastructure.ModelProvider;
 import p4_aas.Infrastructure.UploadAAS;
 import p4_aas.Infrastructure.UploadAASImpl;
@@ -34,8 +35,6 @@ import p4_aas.Infrastructure.UploadAASImpl;
  * Implements IShell
  */
 public abstract class AbstractShell implements IShell {
-    private final String REGISTRYPATH = "http://100.0.2.1:4000/registry/";
-    
     private final String ACCESS_CONTROL_ALLOW_ORIGIN = "*";
     private final String CONTEXT_PATH = "/";
 
@@ -63,11 +62,6 @@ public abstract class AbstractShell implements IShell {
     }
 
     @Override
-    public String getREGISTRYPATH() {
-        return REGISTRYPATH;
-    }
-
-    @Override
     public AssetAdministrationShell getShell() {
         return shell;
     }
@@ -84,7 +78,7 @@ public abstract class AbstractShell implements IShell {
 
     @Override
     public void createDescriptors() {
-        this.descriptorsManager = new UploadAASImpl(this.getREGISTRYPATH());
+        this.descriptorsManager = new UploadAASImpl(StaticProperties.REGISTRYPATH);
         this.descriptorsManager.registerAASSMDescriptors(this.PORT, this.submodels, this.shell);
     }
 

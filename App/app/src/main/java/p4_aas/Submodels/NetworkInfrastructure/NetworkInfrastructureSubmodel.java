@@ -15,14 +15,13 @@
 package p4_aas.Submodels.NetworkInfrastructure;
 
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.AASLambdaPropertyHelper;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
-
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import p4_aas.NetworkController.Utils.ApiEnum;
 import p4_aas.Submodels.AbstractSubmodel;
-
 import java.util.List;
+import java.util.Map;
 
 public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
 
@@ -38,31 +37,36 @@ public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
 		Submodel swPrograms = new Submodel();
         swPrograms.setIdShort("SwPrograms");
 
-        swPrograms.addSubmodelElement(getRunningProgramSw1());
-        swPrograms.addSubmodelElement(getRunningProgramSw2());
+        swPrograms.addSubmodelElement(getRunningProgram());
+        swPrograms.addSubmodelElement(setProgram());
 
 		return List.of(swPrograms);
 	}
 
-    private Property getRunningProgramSw1() {
-        Property currentProgram = new Property("Sw2CurrentProgram", ValueType.String);
+    private Operation getRunningProgram() {
+        Operation currentProgram = new Operation("CurrentProgram");
 
-		AASLambdaPropertyHelper.setLambdaValue(currentProgram, () -> {
-			return lambdaProvider.getCurrentProgram(ApiEnum.CURRENTPROGRAM_SW1.url);
-		}, null);
-
-        return currentProgram;
-    }
-
-    private Property getRunningProgramSw2() {
-        Property currentProgram = new Property("Sw1CurrentProgram", ValueType.String);
-
-		AASLambdaPropertyHelper.setLambdaValue(currentProgram, () -> {
-			return lambdaProvider.getCurrentProgram(ApiEnum.CURRENTPROGRAM_SW2.url);
-		}, null);
+        currentProgram.setInputVariables(getUtils().getCustomInputVariables(Map.of("Switch", ValueType.Integer)));
+        currentProgram.setOutputVariables(getUtils().getOperationVariables(1, "output"));
+        currentProgram.setWrappedInvokable(lambdaProvider.getRequest());
 
         return currentProgram;
     }
 
+    private Operation setProgram() {
+        Operation setProgram = new Operation("SetProgram");
 
+        String description = "Programs:" +
+        lambdaProvider.getRequest(ApiEnum.AVAILABLEPROGRAMS_SW1.url);
+        
+        setProgram.setDescription(new LangStrings("English", description));
+        setProgram.setInputVariables(getUtils().getCustomInputVariables(Map.of(
+            "Switch", ValueType.Integer,
+            "Program", ValueType.String
+        )));
+
+        setProgram.setWrappedInvokable(lambdaProvider.changeProgram());
+
+        return setProgram;
+    }
 }

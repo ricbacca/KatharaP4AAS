@@ -39,11 +39,6 @@ public interface IShell {
     int getPORT();
 
     /**
-     * @return registry path at localhost
-     */
-    String getREGISTRYPATH();
-
-    /**
      * @return created AAS
      */
     AssetAdministrationShell getShell();

@@ -14,21 +14,32 @@
 
 package p4_aas.NetworkController.Utils;
 
+import p4_aas.StaticProperties;
+
 public enum ApiEnum {
-    SW1("http://100.0.1.2:3333"),
-    SW2("http://100.0.1.4:4444"),
+    GETRULES_SW1(StaticProperties.SW1_IP + "/getRules?switch=s1"),
 
-    GETRULES_SW1(SW1.url + "/getRules?switch=s1"),
+    GETRULES_SW2(StaticProperties.SW2_IP + "/getRules?switch=s2"),
 
-    GETRULES_SW2(SW2.url + "/getRules?switch=s2"),
+    DELETERULES_SW1(StaticProperties.SW1_IP + "/removeRule?switch=s1&number="),
 
-    DELETERULES_SW1(SW1.url + "/removeRule?switch=s1&number="),
+    DELETERULES_SW2(StaticProperties.SW2_IP + "/removeRule?switch=s2&number="),
 
-    DELETERULES_SW2(SW2.url + "/removeRule?switch=s2&number="),
+    CURRENTPROGRAM_SW1(StaticProperties.SW1_IP + "/getCurrentProgram?switch=s1"),
 
-    CURRENTPROGRAM_SW1(SW1.url + "/getCurrentProgram?switch=s1"),
+    CURRENTPROGRAM_SW2(StaticProperties.SW2_IP + "/getCurrentProgram?switch=s2"),
+    
+    AVAILABLEPROGRAMS_SW1(StaticProperties.SW1_IP +  "/getAvailablePrograms"),
 
-    CURRENTPROGRAM_SW2(SW2.url + "/getCurrentProgram?switch=s2");
+    AVAILABLEPROGRAMS_SW2(StaticProperties.SW2_IP +  "/getAvailablePrograms"),
+
+    CHANGEPROGRAM_SW1(StaticProperties.SW1_IP + "/executeProgram?switch=s1&program="),
+
+    CHANGEPROGRAM_SW2(StaticProperties.SW2_IP + "/executeProgram?switch=s2&program="),
+
+    RULEDESCRIBER_SW1(StaticProperties.SW1_IP + "/getRuleDescriber?switch=s1"),
+
+    RULEDESCRIBER_SW2(StaticProperties.SW2_IP + "/getRuleDescriber?switch=s2");
 
     public final String url;
 

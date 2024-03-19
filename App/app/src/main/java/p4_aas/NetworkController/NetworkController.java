@@ -25,6 +25,9 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import p4_aas.NetworkController.Utils.Utils;
 
 public class NetworkController extends AbstractNetworkController {
@@ -64,17 +67,36 @@ public class NetworkController extends AbstractNetworkController {
         }
     }
 
-    public String getCurrentProgram(String URL) {
+    public String getStringInfo(String URL) throws HttpResponseException {
         String result = "";
+        int statusCode = 0;
+        String statusMessage = "";
         try {
             CloseableHttpResponse resp = this.apacheClient.execute(new HttpGet(URL));
             result = EntityUtils.toString(resp.getEntity());
+            statusCode = resp.getStatusLine().getStatusCode();
+            statusMessage = resp.getStatusLine().getReasonPhrase();
             resp.close();
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
 
+        if (statusCode != HTTP_OK) {
+            throw new HttpResponseException(statusCode, statusMessage);
+        }
+
         return result;
+    }
+
+    public List<SwitchDescribers> getRuleDescribers(String URL) throws HttpResponseException {
+        try {
+            CloseableHttpResponse resp = this.apacheClient.execute(new HttpGet(URL));
+            String res = EntityUtils.toString(resp.getEntity());
+            return objMap.readValue(res, new TypeReference<List<SwitchDescribers>>(){});
+        } catch (UnsupportedOperationException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Boolean isServerAvailable(String URL) {

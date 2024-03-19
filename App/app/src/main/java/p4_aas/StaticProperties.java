@@ -20,40 +20,26 @@ package p4_aas;
  */
 public class StaticProperties {
 
-    private static final String SIMPLE_CONTROLLERS = "SIMPLECONTROLLERS";
-    private static final String CLOSED_CONTROLLERS = "CLOSEDCONTROLLERS";
-    private static final String SELECTIVE_CONTROLLERS = "SELECTIVECONTROLLERS";
+    public static final String CNT1_IP = "";
+    public static final String CNT2_IP = "";
+    
+    public static final String REGISTRY_POLLING_IP = "http://100.0.2.1:4000/registry/api/v1/registry";
+    public static final String REGISTRYPATH = "http://100.0.2.1:4000/registry/";
 
-    private static boolean getStatus(String CONTROLLER) {
-        return Boolean.parseBoolean(System.getProperty(CONTROLLER, "false"));
-    }
+    public static final String SW1_IP = "http://100.0.1.2:3333";
+    public static final String SW2_IP = "http://100.0.1.4:4444";
 
-    private static void setStatus(String CONTROLLER, boolean newStatus) {
-        System.out.println("" +     CONTROLLER + ": " + newStatus);
-        System.setProperty(CONTROLLER,  Boolean.toString(newStatus));
-    }
+    public static final int NetworkInfrastructurePort = 6001;
+    public static final int NetworkControlPlanePort = 6002;
+    public static final int MachineOnePort = 6003;
+    public static final int MachineTwoPort = 6004;
+    public static final int MachineThreePort = 6005;
 
-    public static boolean isSimpleControllers() {
-        return getStatus(SIMPLE_CONTROLLERS);
-    }
+    public static final String Host1 = "10.0.1.1";
+    public static final String Host2 = "10.0.1.2";
+    public static final String Host3 = "10.0.2.1";
+    public static final String Host4 = "10.0.2.2";
+    public static final String Host5 = "10.0.3.1";
+    public static final String Host6 = "10.0.3.2";
 
-    public static boolean isClosedControllers() {
-        return getStatus(CLOSED_CONTROLLERS);
-    }
-
-    public static boolean isSelectiveControllers() {
-        return getStatus(SELECTIVE_CONTROLLERS);
-    }
-
-    public static void setSimpleControllers(Boolean newValue) {
-        setStatus(SIMPLE_CONTROLLERS, newValue);
-    }
-
-    public static void setClosedControllers(Boolean newValue) {
-        setStatus(CLOSED_CONTROLLERS, newValue);
-    }
-
-    public static void setSelectiveControllers(Boolean newValue) {
-        setStatus(SELECTIVE_CONTROLLERS, newValue);
-    }
 }

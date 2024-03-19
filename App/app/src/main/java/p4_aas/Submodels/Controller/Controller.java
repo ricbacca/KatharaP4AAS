@@ -16,7 +16,10 @@ package p4_aas.Submodels.Controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 
@@ -31,23 +34,27 @@ public class Controller extends AbstractSubmodel {
 
     private ControllerLambda lambdaProvider;
     private final int controllerId;
+    private Submodel createRules;
 
     public Controller(int controllerNumber) {
         super();
         this.controllerId = controllerNumber;
-        this.lambdaProvider = new ControllerLambda(this.getNetworkController());
+        this.lambdaProvider = new ControllerLambda(this.getNetworkController(), this.getUtils());
     }
 
     @Override
     public List<Submodel> createSubmodel() {
         Submodel cntSubmodel = new Submodel();
+        createRules = lambdaProvider.initCreateRules(this.controllerId);
 
 		cntSubmodel.setIdShort("Controller" + controllerId);
+        createRules.setIdShort("CreateRules_CNT" + controllerId);
 
         cntSubmodel.addSubmodelElement(getRules());
         cntSubmodel.addSubmodelElement(deleteRules());
+        cntSubmodel.addSubmodelElement(refreshRules());
 
-		return List.of(cntSubmodel);
+		return List.of(cntSubmodel, createRules);
     }
 
     private Operation getRules() {
@@ -59,12 +66,29 @@ public class Controller extends AbstractSubmodel {
         return getRules;
     }
 
+    private Operation refreshRules() {
+        Operation refreshRules = new Operation("RefreshRules");
+
+        refreshRules.setWrappedInvokable(refreshRules(controllerId));
+        return refreshRules;
+    }
+
+    public Function<Map<String, SubmodelElement>, SubmodelElement[]> refreshRules(int controllerId) {
+        return (args) -> {
+            this.lambdaProvider.getKeys().forEach(el -> this.createRules.deleteSubmodelElement(el));
+            this.lambdaProvider.refreshRuleSubmodel(this.controllerId, this.createRules);
+
+            return new SubmodelElement[]{};
+        };
+    }
+
     private Operation deleteRules() {
         Operation deleteRules = new Operation("DeleteSwitchRules");
         deleteRules.setInputVariables(getUtils().getCustomInputVariables(Map.of("ruleID", ValueType.Integer)));
 
         deleteRules.setWrappedInvokable(lambdaProvider.deleteRules(controllerId == 1 ? ApiEnum.DELETERULES_SW1.url :
                                                                                           ApiEnum.DELETERULES_SW2.url));
+
         return deleteRules;
     }
 }
