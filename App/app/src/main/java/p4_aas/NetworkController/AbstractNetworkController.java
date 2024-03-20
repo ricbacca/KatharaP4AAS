@@ -15,16 +15,17 @@
 package p4_aas.NetworkController;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 public abstract class AbstractNetworkController {
     protected static final int HTTP_OK = 200;
     CloseableHttpClient apacheClient;
@@ -37,17 +38,17 @@ public abstract class AbstractNetworkController {
 
     /**
      * @param URL
-     * @param body
+     * @param nvps
      * @return Post request Status Code
      * @throws HttpResponseException 
      */
-    public Integer postRequest(String URL, ObjectNode body) throws HttpResponseException {
+    public void postRequest(String URL, List<NameValuePair> nvps) throws HttpResponseException {
         int statusCode = 0;
         String statusMessage = "";
         HttpPost httpPost = new HttpPost(URL);
 
         try {
-            httpPost.setEntity(new StringEntity(body.toString()));
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps));
             HttpResponse response = apacheClient.execute(httpPost);
             statusCode = response.getStatusLine().getStatusCode();
             statusMessage = response.getStatusLine().getReasonPhrase();
@@ -58,7 +59,5 @@ public abstract class AbstractNetworkController {
 
         if (statusCode != HTTP_OK)
             throw new HttpResponseException(statusCode, statusMessage);
-
-        return statusCode;
     }
 }

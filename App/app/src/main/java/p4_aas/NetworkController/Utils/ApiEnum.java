@@ -39,7 +39,11 @@ public enum ApiEnum {
 
     RULEDESCRIBER_SW1(StaticProperties.SW1_IP + "/getRuleDescriber?switch=s1"),
 
-    RULEDESCRIBER_SW2(StaticProperties.SW2_IP + "/getRuleDescriber?switch=s2");
+    RULEDESCRIBER_SW2(StaticProperties.SW2_IP + "/getRuleDescriber?switch=s2"),
+
+    ADDRULE_SW1(StaticProperties.SW1_IP + "/addRule?switch=s1&"),
+
+    ADDRULE_SW2(StaticProperties.SW2_IP + "/addRule?switch=s2&");
 
     public final String url;
 

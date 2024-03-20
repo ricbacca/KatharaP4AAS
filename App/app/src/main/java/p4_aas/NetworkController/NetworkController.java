@@ -15,14 +15,18 @@
 package p4_aas.NetworkController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
@@ -32,6 +36,7 @@ import p4_aas.NetworkController.Utils.Utils;
 
 public class NetworkController extends AbstractNetworkController {
     Utils utils = new Utils();
+    int ruleParamsCounter = 0;
 
     public SubmodelElement[] getRules(String URL) {
         List<String> resultList = new LinkedList<>();
@@ -117,5 +122,28 @@ public class NetworkController extends AbstractNetworkController {
         }
 
         return statusCode == HTTP_OK;
+    }
+
+    /**
+     * 
+     * @param URL
+     * @param inputs: (Key, Value) -> (input field name, input field value)
+     * ex. (hdr.ipv4.dstAddr, 10.0.0.1/24) -> if match is LPM (without /24 otherwise)
+     * @throws HttpResponseException 
+     */
+    public void postRule(String URL, Map<String, String> inputs) throws HttpResponseException {
+        this.ruleParamsCounter = 0;
+        List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+
+        inputs.forEach((k,v) -> {
+            if (k.startsWith("hdr")) {
+                nvps.add(new BasicNameValuePair("key0", v));
+            } else {
+                nvps.add(new BasicNameValuePair("par" + this.ruleParamsCounter, v));
+                this.ruleParamsCounter++;
+            }
+        });
+
+        this.postRequest(URL, nvps);
     }
 }

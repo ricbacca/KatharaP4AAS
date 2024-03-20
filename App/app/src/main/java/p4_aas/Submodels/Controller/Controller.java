@@ -16,10 +16,7 @@ package p4_aas.Submodels.Controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 
@@ -69,17 +66,8 @@ public class Controller extends AbstractSubmodel {
     private Operation refreshRules() {
         Operation refreshRules = new Operation("RefreshRules");
 
-        refreshRules.setWrappedInvokable(refreshRules(controllerId));
+        refreshRules.setWrappedInvokable(this.lambdaProvider.refreshRules(controllerId, createRules));
         return refreshRules;
-    }
-
-    public Function<Map<String, SubmodelElement>, SubmodelElement[]> refreshRules(int controllerId) {
-        return (args) -> {
-            this.lambdaProvider.getKeys().forEach(el -> this.createRules.deleteSubmodelElement(el));
-            this.lambdaProvider.refreshRuleSubmodel(this.controllerId, this.createRules);
-
-            return new SubmodelElement[]{};
-        };
     }
 
     private Operation deleteRules() {
