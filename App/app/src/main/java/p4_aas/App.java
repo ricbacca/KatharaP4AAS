@@ -80,7 +80,6 @@ public class App {
     /**
      * Polling on Registry Url, waiting for a positive response to proceed on.
      */
-    
     private static void waitForRegistry() {
         System.out.print("Waiting for Registry at " + StaticProperties.REGISTRY_POLLING_IP);
         while(!client.isServerAvailable(StaticProperties.REGISTRY_POLLING_IP)) {

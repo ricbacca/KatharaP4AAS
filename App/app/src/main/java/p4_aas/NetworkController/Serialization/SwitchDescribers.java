@@ -1,4 +1,4 @@
-package p4_aas.NetworkController;
+package p4_aas.NetworkController.Serialization;
 
 import java.util.List;
 
@@ -26,7 +26,6 @@ public class SwitchDescribers {
     private List<ActionParam> actionParams;
 
     // Getters and setters
-
     public String getTableName() {
         return tableName;
     }

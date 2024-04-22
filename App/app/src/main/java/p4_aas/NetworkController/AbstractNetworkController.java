@@ -15,17 +15,26 @@
 package p4_aas.NetworkController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 public abstract class AbstractNetworkController {
     protected static final int HTTP_OK = 200;
     CloseableHttpClient apacheClient;
@@ -42,7 +51,7 @@ public abstract class AbstractNetworkController {
      * @return Post request Status Code
      * @throws HttpResponseException 
      */
-    public void postRequest(String URL, List<NameValuePair> nvps) throws HttpResponseException {
+    public void postRequest(String URL, List<NameValuePair> nvps) {
         int statusCode = 0;
         String statusMessage = "";
         HttpPost httpPost = new HttpPost(URL);
@@ -58,6 +67,54 @@ public abstract class AbstractNetworkController {
         }
 
         if (statusCode != HTTP_OK)
-            throw new HttpResponseException(statusCode, statusMessage);
+            try {
+                throw new HttpResponseException(statusCode, statusMessage);
+            } catch (HttpResponseException e) {
+                e.printStackTrace();
+            }
+    }
+
+    public String getRequest(String URL) {
+        int statusCode = 0;
+        String statusMessage = "";
+        String result = "";
+        
+        CloseableHttpResponse resp;
+        try {
+            resp = this.apacheClient.execute(new HttpGet(URL));
+            result = EntityUtils.toString(resp.getEntity());
+            statusCode = resp.getStatusLine().getStatusCode();
+            statusMessage = resp.getStatusLine().getReasonPhrase();
+            resp.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (statusCode != HTTP_OK)
+            try {
+                throw new HttpResponseException(statusCode, statusMessage);
+            } catch (HttpResponseException e) {
+                e.printStackTrace();
+            }
+
+        return result;
+    }
+
+    public SubmodelElement createProperty(String idShort, Object value) {
+        SubmodelElement el = new Property(idShort, value);
+        el.setKind(ModelingKind.TEMPLATE);
+        return el;
+    }
+
+    public List<String> jsonToList(String json) {
+        Gson gson = new Gson();
+        JsonArray jsonArray = gson.fromJson(json, JsonArray.class);
+        List<String> resultList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            resultList.add(jsonArray.get(i).toString());
+        }
+
+        return resultList;
     }
 }

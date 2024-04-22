@@ -16,7 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operat
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 
 import p4_aas.NetworkController.NetworkController;
-import p4_aas.NetworkController.SwitchDescribers;
+import p4_aas.NetworkController.Serialization.SwitchDescribers;
 import p4_aas.NetworkController.Utils.ApiEnum;
 import p4_aas.Submodels.Utils.Utils;
 
@@ -47,12 +47,7 @@ public class ControllerLambda {
     }
 
     public List<SwitchDescribers> getRuleDescribersForSwitch(String URL) {
-        try {
-            return client.getRuleDescribers(URL);
-        } catch (HttpResponseException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return client.getRuleDescribers(URL);
     }
 
     // Initializing Submodel and Op Variables to create new Controller rules
@@ -100,11 +95,7 @@ public class ControllerLambda {
             String URL = (controllerId == 1 ? 
                 ApiEnum.ADDRULE_SW1.url + op.getDescription().get("English") : ApiEnum.ADDRULE_SW2.url + op.getDescription().get("English"));
 
-            try {
-                client.postRule(URL, inputValues);
-            } catch (HttpResponseException e) {
-                e.printStackTrace();
-            }
+            client.postRule(URL, inputValues);
 
             return new SubmodelElement[]{};
         };

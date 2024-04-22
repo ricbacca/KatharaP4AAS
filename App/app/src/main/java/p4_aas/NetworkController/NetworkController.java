@@ -27,29 +27,28 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import p4_aas.NetworkController.Utils.Utils;
+import p4_aas.NetworkController.Serialization.SwitchDescribers;
 
 public class NetworkController extends AbstractNetworkController {
-    Utils utils = new Utils();
     int ruleParamsCounter = 0;
 
+    /**
+     * 
+     * @param URL
+     * @return current rules into Switch.
+     */
     public SubmodelElement[] getRules(String URL) {
         List<String> resultList = new LinkedList<>();
         List<SubmodelElement> finalRes = new LinkedList<>();
-        try {
-            CloseableHttpResponse resp = this.apacheClient.execute(new HttpGet(URL));
-            resultList = utils.jsonToList(EntityUtils.toString(resp.getEntity()));
-            resp.close();
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
+
+        resultList = this.jsonToList(this.getRequest(URL));
         resultList.forEach(el -> {
-            finalRes.add(utils.createProperty("Rule" , el));
+            finalRes.add(this.createProperty("Rule" , el));
         });
 
         return finalRes.toArray(new SubmodelElement[finalRes.size()]);
@@ -72,36 +71,22 @@ public class NetworkController extends AbstractNetworkController {
         }
     }
 
-    public String getStringInfo(String URL) throws HttpResponseException {
-        String result = "";
-        int statusCode = 0;
-        String statusMessage = "";
+    /**
+     * 
+     * @param URL
+     * @return rule describers for creating new Firewall rules.
+     * @throws HttpResponseException
+     */
+    public List<SwitchDescribers> getRuleDescribers(String URL) {
+        String res = this.getRequest(URL);
+        List<SwitchDescribers> results = new LinkedList<>();
         try {
-            CloseableHttpResponse resp = this.apacheClient.execute(new HttpGet(URL));
-            result = EntityUtils.toString(resp.getEntity());
-            statusCode = resp.getStatusLine().getStatusCode();
-            statusMessage = resp.getStatusLine().getReasonPhrase();
-            resp.close();
-        } catch (ParseException | IOException e) {
+            results = objMap.readValue(res, new TypeReference<List<SwitchDescribers>>(){});
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
-        if (statusCode != HTTP_OK) {
-            throw new HttpResponseException(statusCode, statusMessage);
-        }
-
-        return result;
-    }
-
-    public List<SwitchDescribers> getRuleDescribers(String URL) throws HttpResponseException {
-        try {
-            CloseableHttpResponse resp = this.apacheClient.execute(new HttpGet(URL));
-            String res = EntityUtils.toString(resp.getEntity());
-            return objMap.readValue(res, new TypeReference<List<SwitchDescribers>>(){});
-        } catch (UnsupportedOperationException | IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        
+        return results;
     }
 
     public Boolean isServerAvailable(String URL) {
@@ -131,7 +116,7 @@ public class NetworkController extends AbstractNetworkController {
      * ex. (hdr.ipv4.dstAddr, 10.0.0.1/24) -> if match is LPM (without /24 otherwise)
      * @throws HttpResponseException 
      */
-    public void postRule(String URL, Map<String, String> inputs) throws HttpResponseException {
+    public void postRule(String URL, Map<String, String> inputs) {
         this.ruleParamsCounter = 0;
         List <NameValuePair> nvps = new ArrayList <NameValuePair>();
 

@@ -1,4 +1,4 @@
-package p4_aas.NetworkController;
+package p4_aas.NetworkController.Serialization;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,6 +16,8 @@ public class ActionParam {
 
     @JsonProperty("Pattern")
     private String pattern;
+
+    // Getters and Setters
     public String getName() {
         return name;
     }

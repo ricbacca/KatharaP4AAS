@@ -15,14 +15,9 @@
 package p4_aas;
 
 /**
- * To manage System properties, used to mantain info throughout the app
- * about which controller is on, and not cause any problems.
+ * To manage System properties, used to mantain info throughout the app.
  */
 public class StaticProperties {
-
-    public static final String CNT1_IP = "";
-    public static final String CNT2_IP = "";
-    
     public static final String REGISTRY_POLLING_IP = "http://100.0.2.1:4000/registry/api/v1/registry";
     public static final String REGISTRYPATH = "http://100.0.2.1:4000/registry/";
 
@@ -41,5 +36,4 @@ public class StaticProperties {
     public static final String Host4 = "10.0.2.2";
     public static final String Host5 = "10.0.3.1";
     public static final String Host6 = "10.0.3.2";
-
 }
