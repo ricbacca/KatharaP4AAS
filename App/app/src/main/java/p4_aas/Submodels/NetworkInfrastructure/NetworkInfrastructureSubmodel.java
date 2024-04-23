@@ -16,6 +16,7 @@ package p4_aas.Submodels.NetworkInfrastructure;
 
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import p4_aas.NetworkController.Utils.ApiEnum;
@@ -39,9 +40,19 @@ public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
 
         swPrograms.addSubmodelElement(getRunningProgram());
         swPrograms.addSubmodelElement(setProgram());
+        swPrograms.addSubmodelElement(description());
 
 		return List.of(swPrograms);
 	}
+
+    private File description() {
+        File file = new File();
+        file.setMimeType("image/jpg");
+        file.setIdShort("Description");
+        file.setValue("https://raw.githubusercontent.com/ricbacca/KatharaP4AAS/main/docs/P4AAS.jpg");
+
+        return file;
+    }
 
     /**
      * Operation into SwPrograms submodel.
