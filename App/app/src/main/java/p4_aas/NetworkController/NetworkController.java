@@ -32,7 +32,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import p4_aas.NetworkController.Serialization.SwitchDescribers;
+import p4_aas.NetworkController.Serialization.RuleDescribers;
 
 public class NetworkController extends AbstractNetworkController {
     int ruleParamsCounter = 0;
@@ -77,11 +77,11 @@ public class NetworkController extends AbstractNetworkController {
      * @return rule describers for creating new Firewall rules.
      * @throws HttpResponseException
      */
-    public List<SwitchDescribers> getRuleDescribers(String URL) {
+    public List<RuleDescribers> getRuleDescribers(String URL) {
         String res = this.getRequest(URL);
-        List<SwitchDescribers> results = new LinkedList<>();
+        List<RuleDescribers> results = new LinkedList<>();
         try {
-            results = objMap.readValue(res, new TypeReference<List<SwitchDescribers>>(){});
+            results = objMap.readValue(res, new TypeReference<List<RuleDescribers>>(){});
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

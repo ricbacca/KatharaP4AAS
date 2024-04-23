@@ -25,7 +25,7 @@ import p4_aas.Submodels.AbstractSubmodel;
 import p4_aas.Submodels.Utils.Utils;
 
 /**
- * Submodel Impl for Netwok Control Plane AAS.
+ * Submodel Impl for Netwok Control Plane.
  */
 public class Controller extends AbstractSubmodel {
 
@@ -42,10 +42,11 @@ public class Controller extends AbstractSubmodel {
     @Override
     public List<Submodel> createSubmodel() {
         Submodel cntSubmodel = new Submodel();
-        createRules = lambdaProvider.initCreateRules(this.controllerId);
+        createRules = new Submodel();
 
 		cntSubmodel.setIdShort("Controller" + controllerId);
         createRules.setIdShort("CreateRules_CNT" + controllerId);
+        lambdaProvider.getRuleDescribers(controllerId, createRules);
 
         cntSubmodel.addSubmodelElement(getRules());
         cntSubmodel.addSubmodelElement(deleteRules());
@@ -54,6 +55,9 @@ public class Controller extends AbstractSubmodel {
 		return List.of(cntSubmodel, createRules);
     }
 
+    /*
+     * Gets current rules into P4 Controller program.
+     */
     private Operation getRules() {
         Operation getRules = new Operation("GetSwitchRules");
         getRules.setOutputVariables(getUtils().getOperationVariables(Utils.GET_FIREWALL_RULES, "Output"));
@@ -63,6 +67,10 @@ public class Controller extends AbstractSubmodel {
         return getRules;
     }
 
+    /**
+     * Refreshes Submodel elements into "createRules" submodel.
+     * This operation has to be called whenever someone changes Controller Program in the Switch.
+     */
     private Operation refreshRules() {
         Operation refreshRules = new Operation("RefreshRules");
 
@@ -70,6 +78,10 @@ public class Controller extends AbstractSubmodel {
         return refreshRules;
     }
 
+    /**
+     * Deletes rules registered into P4 Controller progran, by ruleID (from index 0).
+     * @return
+     */
     private Operation deleteRules() {
         Operation deleteRules = new Operation("DeleteSwitchRules");
         deleteRules.setInputVariables(getUtils().getCustomInputVariables(Map.of("ruleID", ValueType.Integer)));

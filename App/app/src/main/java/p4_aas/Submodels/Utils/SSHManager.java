@@ -33,7 +33,7 @@ import com.jcraft.jsch.Session;
  *  - Root password at: 111111
  *  - Port: 22
  * 
- * So each connection is very similar and simpler to manager.
+ * So each connection is very similar and simpler to manage.
  */
 public class SSHManager {
     private final String SSH_PSW = "111111";

@@ -43,6 +43,11 @@ public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
 		return List.of(swPrograms);
 	}
 
+    /**
+     * Operation into SwPrograms submodel.
+     * Input: Switch numer (1 or 2).
+     * Output: current P4 program executed by the P4 Switch.
+     */
     private Operation getRunningProgram() {
         Operation currentProgram = new Operation("CurrentProgram");
 
@@ -53,11 +58,15 @@ public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
         return currentProgram;
     }
 
+    /**
+     * Input: new program name, to be executed by the specified Switch.
+     * @return Operation to set a new program in the specified Switch.
+     */
     private Operation setProgram() {
         Operation setProgram = new Operation("SetProgram");
 
         String description = "Programs:" +
-        lambdaProvider.getRequest(ApiEnum.AVAILABLEPROGRAMS_SW1.url);
+        this.getNetworkController().getRequest(ApiEnum.AVAILABLEPROGRAMS_SW1.url);
         
         setProgram.setDescription(new LangStrings("English", description));
         setProgram.setInputVariables(getUtils().getCustomInputVariables(Map.of(
