@@ -43,7 +43,19 @@ public enum ApiEnum {
 
     ADDRULE_SW1(StaticProperties.SW1_IP + "/addRule?switch=s1&"),
 
-    ADDRULE_SW2(StaticProperties.SW2_IP + "/addRule?switch=s2&");
+    ADDRULE_SW2(StaticProperties.SW2_IP + "/addRule?switch=s2&"),
+
+    ARP_REPLY_RULE_SW1(ADDRULE_SW1.url + "idTable=50101297&idAction=22921650"),
+
+    ARP_REPLY_RULE_SW2(ADDRULE_SW2.url + "idTable=50101297&idAction=22921650"),
+
+    IPV4_EXACT_RULE_SW1(ADDRULE_SW1.url + "idTable=33757179&idAction=28792405"),
+
+    IPV4_EXACT_RULE_SW2(ADDRULE_SW2.url + "idTable=33757179&idAction=28792405"),
+
+    IPV4_LPM_RULE_SW1(ADDRULE_SW1.url + "idTable=33757179&idAction=28792405"),
+
+    IPV4_LPM_RULE_SW2(ADDRULE_SW2.url + "idTable=33757179&idAction=28792405");
 
     public final String url;
 

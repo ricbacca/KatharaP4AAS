@@ -44,16 +44,88 @@ public class NetworkInfrastructureLambda {
      */
     public Function<Map<String, SubmodelElement>, SubmodelElement[]> changeProgram() {
        return (args) -> {
-            Integer Switch = ((BigInteger) args.get("Switch").getValue()).intValue();
-            if (Switch == 1) {
-                this.client.getRequest(ApiEnum.CHANGEPROGRAM_SW1.url + (String) args.get("Program").getValue());
-            }
-            if (Switch == 2) {
-                this.client.getRequest(ApiEnum.CHANGEPROGRAM_SW2.url + (String) args.get("Program").getValue());
-            }
+            this.changeSwitchProgram(this.getSwitchID(args), this.getProgram(args));
+            this.postRules(this.getSwitchID(args), this.getProgram(args), this.getHost(args));
 
             return new SubmodelElement[]{};
         };
+    }
+
+    private void postRules(int switchID, String program, String host) {
+        switch(switchID) {
+            case 1: 
+                this.postArpRules(switchID, ApiEnum.ARP_REPLY_RULE_SW1.url);
+                switch(program) {
+                    case "standard": break;
+                    case "blockSingleHost": break;
+                    case "enableSingleHost": break;
+                    default: break;
+                }
+                break;
+            case 2: 
+                this.postArpRules(switchID, ApiEnum.ARP_REPLY_RULE_SW2.url);
+                switch(program) {
+                    case "standard": break;
+                    case "blockSingleHost": break;
+                    case "enableSingleHost": break;
+                    default: break;
+                }
+                break;
+        }
+    }
+
+    private void postArpRules(int switchID, String URL) {
+        switch(switchID) {
+            case 1:
+                client.postRule(URL, Map.of(
+                    "hdr.arp.dstAddr", "10.0.1.1",
+                    "src_mac", "00:00:00:00:00:01"     
+                ));
+                client.postRule(URL, Map.of(
+                    "hdr.arp.dstAddr", "10.0.1.2",
+                    "src_mac", "00:00:00:00:00:01"
+                ));
+                client.postRule(URL, Map.of(
+                    "hdr.arp.dstAddr", "10.0.2.1",
+                    "src_mac", "00:00:00:00:00:02"     
+                ));
+                client.postRule(URL, Map.of(
+                    "hdr.arp.dstAddr", "10.0.2.2",
+                    "src_mac", "00:00:00:00:00:02"
+                ));
+                break;
+            case 2:
+                client.postRule(URL, Map.of(
+                    "hdr.arp.dstAddr", "10.0.3.1",
+                    "src_mac", "00:00:00:00:00:04"     
+                ));
+                client.postRule(URL, Map.of(
+                    "hdr.arp.dstAddr", "10.0.3.2",
+                    "src_mac", "00:00:00:00:00:04"
+                ));
+                break;
+            default:
+                break;
+        }
+    }
+
+    private int getSwitchID(Map<String, SubmodelElement> args) {
+        return ((BigInteger) args.get("Switch").getValue()).intValue();
+    }
+
+    private String getProgram(Map<String, SubmodelElement> args) {
+        return (String) args.get("Program").getValue();
+    }
+
+    private String getHost(Map<String, SubmodelElement> args) {
+        return (String) args.get("Host").getValue();
+    }
+
+    private void changeSwitchProgram(int switchId, String program) {
+        String URL = (switchId == 1 ?
+            ApiEnum.CHANGEPROGRAM_SW1.url :
+            ApiEnum.CHANGEPROGRAM_SW2.url) + program;
+        client.getRequest(URL);
     }
 
 }

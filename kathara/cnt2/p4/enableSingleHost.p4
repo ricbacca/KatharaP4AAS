@@ -196,7 +196,7 @@ control MyIngress(inout headers hdr,
         mark_to_drop(standard_metadata);
     }
 
-    action arp_reply(macAddr_t request_mac) {
+    action arp_reply(macAddr_t dstAddr) {
       //update operation code from request to reply
       hdr.arp.op_code = ARP_REPLY;
       
@@ -204,14 +204,14 @@ control MyIngress(inout headers hdr,
       hdr.arp.dst_mac = hdr.arp.src_mac;
       
       //reply's dst_ip is the request's src ip
-      hdr.arp.src_mac = request_mac;
+      hdr.arp.src_mac = dstAddr;
 
       //reply's src ip is the request's dst ip
       hdr.arp.src_ip = hdr.arp.dst_ip;
 
       //update ethernet header
       hdr.ethernet.dstAddr = hdr.ethernet.srcAddr;
-      hdr.ethernet.srcAddr = request_mac;
+      hdr.ethernet.srcAddr = dstAddr;
 
       //send it back to the same port
       standard_metadata.egress_spec = standard_metadata.ingress_port;
@@ -238,7 +238,7 @@ control MyIngress(inout headers hdr,
             drop;
         }
         size = 1024;
-        default_action = drop;
+        default_action = NoAction();
     }
 
     table ipv4_exact {
@@ -248,6 +248,19 @@ control MyIngress(inout headers hdr,
         actions = {
             ipv4_forward;
             drop;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction();
+    }
+
+    table ipv4_exact_src {
+        key = {
+            hdr.ipv4.srcAddr: exact;
+        }
+        actions = {
+            drop;
+            ipv4_forward;
             NoAction;
         }
         size = 1024;
@@ -269,8 +282,10 @@ control MyIngress(inout headers hdr,
 
     apply {
         if (hdr.ipv4.isValid()) {
-            if (!ipv4_exact.apply().hit){
-            	ipv4_lpm.apply();
+            if (!ipv4_exact_src.apply().hit){
+                if (!ipv4_exact.apply().hit) {
+                    ipv4_lpm.apply();
+                }
             }
         } else if (hdr.ethernet.etherType == TYPE_ARP) {
           //cannot validate ARP header, dunno why :S

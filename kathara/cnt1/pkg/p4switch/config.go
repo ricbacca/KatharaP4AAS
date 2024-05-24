@@ -21,7 +21,6 @@ const (
 
 // Changes the configuration of switch, i.e. program currently executing on it, digests and rules
 func (sw *GrpcSwitch) ChangeConfig(ctx context.Context, newConfig *SwitchConfig) error {
-
 	sw.config = newConfig
 
 	if _, err := sw.p4RtC.SaveFwdPipeFromBytes(ctx, sw.readBin(), sw.readP4Info(), 0); err != nil {

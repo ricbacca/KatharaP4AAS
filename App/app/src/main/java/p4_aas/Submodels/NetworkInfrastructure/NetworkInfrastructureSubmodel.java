@@ -82,7 +82,8 @@ public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
         setProgram.setDescription(new LangStrings("English", description));
         setProgram.setInputVariables(getUtils().getCustomInputVariables(Map.of(
             "Switch", ValueType.Integer,
-            "Program", ValueType.String
+            "Program", ValueType.String,
+            "Host", ValueType.String
         )));
 
         setProgram.setWrappedInvokable(lambdaProvider.changeProgram());

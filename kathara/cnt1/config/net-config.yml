@@ -1,5 +1,5 @@
 s1:
-  program: program
+  program: standard
   digest:
   rules:
     - table: MyIngress.ipv4_exact

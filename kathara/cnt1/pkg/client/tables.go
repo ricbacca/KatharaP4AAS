@@ -229,6 +229,8 @@ func (c *Client) NewTableEntry(
 		Action:          action,
 	}
 
+	fmt.Println("ENTRYYYYYYYY: ", entry)
+
 	//nolint:staticcheck // SA5011 if mfs==nil then for loop is not executed by default
 	//lint:ignore SA5011 This line added for support golint version of VSC
 	for name, mf := range mfs {

@@ -1,16 +1,18 @@
 package p4_aas.Submodels.Controller;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.math.*;
 
-import org.apache.http.client.HttpResponseException;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
@@ -31,17 +33,24 @@ public class ControllerLambda {
 
     public Function<Map<String, SubmodelElement>, SubmodelElement[]> getRules(String url) {
         return (args) -> {
-            return client.getRules(url);
+            List<SubmodelElement> finalRes = new LinkedList<>();
+
+            client.getRules(url).forEach(el -> {
+                finalRes.add(this.createProperty("Rule" , el));
+            });
+            return finalRes.toArray(new SubmodelElement[finalRes.size()]);
         };
+    }
+
+    private SubmodelElement createProperty(String idShort, Object value) {
+        SubmodelElement el = new Property(idShort, value);
+        el.setKind(ModelingKind.TEMPLATE);
+        return el;
     }
 
     public Function<Map<String, SubmodelElement>, SubmodelElement[]> deleteRules(String url) {
         return (args) -> {
-            try {
-                client.deleteRule(url + (BigInteger) args.get("ruleID").getValue());
-            } catch (HttpResponseException e) {
-                e.printStackTrace();
-            }
+            client.deleteRule(url + (BigInteger) args.get("ruleID").getValue());
             return new SubmodelElement[]{};
         };
     }
@@ -117,6 +126,36 @@ public class ControllerLambda {
             
             getRuleDescribers(controllerId, createRules);
             return new SubmodelElement[]{};
+        };
+    }
+
+    private void deleteDuplicateRule(List<String> rules, String hostIP, String URL) {
+        Optional<String> element = rules.stream()
+                .filter(el -> el.contains(hostIP) && el.contains("MyIngress.ipv4_exact"))
+                .findFirst();
+
+        if (element.isPresent())
+            client.deleteRule(URL + Integer.toString(rules.indexOf(element.get())));
+    }
+
+    public Function<Map<String, SubmodelElement>, SubmodelElement[]> denySingleHost() {
+        return (args) -> {
+            String hostIP = (String) args.get("HostIP").getValue();
+
+            // elimino eventuali regole di forwarding per l'IP che voglio bloccare, da entrambi i controller
+            this.deleteDuplicateRule(client.getRules(ApiEnum.GETRULES_SW1.url), hostIP, ApiEnum.DELETERULES_SW1.url);
+            this.deleteDuplicateRule(client.getRules(ApiEnum.GETRULES_SW2.url), hostIP, ApiEnum.DELETERULES_SW2.url);
+
+            // Inserire sia in un controller che nell'altro, le nuove regole
+            client.postRule(ApiEnum.ADDRULE_SW1.url + "idTable=39741171&idAction=25652968", Map.of("hdr.ipv4.srcAddr", hostIP));
+            client.postRule(ApiEnum.ADDRULE_SW2.url + "idTable=39741171&idAction=25652968", Map.of("hdr.ipv4.srcAddr", hostIP));
+
+            client.postRule(ApiEnum.ADDRULE_SW1.url + "idTable=33757179&idAction=25652968", Map.of("hdr.ipv4.dstAddr", hostIP));
+            client.postRule(ApiEnum.ADDRULE_SW2.url + "idTable=33757179&idAction=25652968", Map.of("hdr.ipv4.dstAddr", hostIP));
+
+            return new SubmodelElement[]{
+                new Property("Configuration uploaded")
+            };
         };
     }
 }

@@ -12,6 +12,4 @@ arp -s 100.0.1.2 00:00:00:00:01:01
 # This Switch is default gateway for some hosts, so it mantains some basic info.
 arp -s 100.0.1.5 00:00:00:00:00:08
 
-sleep 5
-
 simple_switch_grpc --no-p4 -i 1@eth0 -i 2@eth1 -i 3@eth2 --device-id 1 -- --grpc-server-addr 100.0.1.1:50051 --cpu-port 255

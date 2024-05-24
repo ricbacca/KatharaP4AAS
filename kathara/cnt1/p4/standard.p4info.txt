@@ -9,7 +9,7 @@ tables {
   }
   match_fields {
     id: 1
-    name: "hdr.arp.dst_ip"
+    name: "hdr.arp.dstAddr"
     bitwidth: 32
     match_type: EXACT
   }
@@ -38,6 +38,29 @@ tables {
   }
   action_refs {
     id: 25652968
+  }
+  action_refs {
+    id: 21257015
+  }
+  size: 1024
+}
+tables {
+  preamble {
+    id: 39741171
+    name: "MyIngress.ipv4_exact_src"
+    alias: "ipv4_exact_src"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.ipv4.srcAddr"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  action_refs {
+    id: 25652968
+  }
+  action_refs {
+    id: 28792405
   }
   action_refs {
     id: 21257015
@@ -90,7 +113,7 @@ actions {
   }
   params {
     id: 1
-    name: "request_mac"
+    name: "src_mac"
     bitwidth: 48
   }
 }

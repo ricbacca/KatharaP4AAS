@@ -27,7 +27,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,19 +41,15 @@ public class NetworkController extends AbstractNetworkController {
      * @param URL
      * @return current rules into Switch.
      */
-    public SubmodelElement[] getRules(String URL) {
+    public List<String> getRules(String URL) {
         List<String> resultList = new LinkedList<>();
-        List<SubmodelElement> finalRes = new LinkedList<>();
 
         resultList = this.jsonToList(this.getRequest(URL));
-        resultList.forEach(el -> {
-            finalRes.add(this.createProperty("Rule" , el));
-        });
 
-        return finalRes.toArray(new SubmodelElement[finalRes.size()]);
+        return resultList;
     }
 
-    public void deleteRule(String URL) throws HttpResponseException {
+    public void deleteRule(String URL) {
         int statusCode = 0;
         String statusMessage = "";
         try {
@@ -67,7 +62,11 @@ public class NetworkController extends AbstractNetworkController {
         }
 
         if (statusCode != HTTP_OK) {
-            throw new HttpResponseException(statusCode, statusMessage);
+            try {
+                throw new HttpResponseException(statusCode, statusMessage);
+            } catch (HttpResponseException e) {
+                e.printStackTrace();
+            }
         }
     }
 

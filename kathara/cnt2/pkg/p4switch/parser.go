@@ -354,7 +354,7 @@ func findIfKnownPattern(name string, bitwidth int) string {
 	if strings.Contains(strings.ToLower(name), "port") {
 		return pattern_port
 	}
-	if strings.Contains(strings.ToLower(name), "addr") {
+	if strings.Contains(strings.ToLower(name), "addr") || strings.Contains(strings.ToLower(name), "src_mac") {
 		switch bitwidth {
 		case 32:
 			return pattern_ipv4_addr

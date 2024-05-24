@@ -28,10 +28,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -100,11 +96,7 @@ public abstract class AbstractNetworkController {
         return result;
     }
 
-    public SubmodelElement createProperty(String idShort, Object value) {
-        SubmodelElement el = new Property(idShort, value);
-        el.setKind(ModelingKind.TEMPLATE);
-        return el;
-    }
+
 
     public List<String> jsonToList(String json) {
         Gson gson = new Gson();
