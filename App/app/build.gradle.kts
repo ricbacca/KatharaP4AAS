@@ -24,6 +24,9 @@ dependencies {
 
     implementation("com.jcraft:jsch:0.1.55")
     implementation("org.apache.httpcomponents:fluent-hc:4.5.14")
+
+    implementation("org.yaml:snakeyaml:1.8")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.0.1")
 }
 
 application {

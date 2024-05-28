@@ -14,5 +14,5 @@ cp sshd_config /etc/ssh/
 echo -e "111111\n111111" | passwd root
 service ssh start
 
-#sleep 5
-#go run ./main.go -id 1 -cp 3333 -sw 100.0.1.1:50051 -config ./config/net-config.yml -topology ./config/net-topo.json -verbose
+sleep 5
+go run ./main.go -id 1 -cp 3333 -sw 100.0.1.1:50051 -config ./config/net-config.yml -topology ./config/net-topo.json -verbose

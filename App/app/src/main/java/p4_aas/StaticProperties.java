@@ -21,6 +21,8 @@ public class StaticProperties {
     public static final String REGISTRY_POLLING_IP = "http://100.0.2.1:4000/registry/api/v1/registry";
     public static final String REGISTRYPATH = "http://100.0.2.1:4000/registry/";
 
+    public static final String YAML_FILE_PATH = "net-config.yml";
+
     public static final String SW1_IP = "http://100.0.1.2:3333";
     public static final String SW2_IP = "http://100.0.1.4:4444";
 

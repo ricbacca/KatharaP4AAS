@@ -1,7 +1,6 @@
 package p4_aas.Submodels.Controller;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -126,36 +125,6 @@ public class ControllerLambda {
             
             getRuleDescribers(controllerId, createRules);
             return new SubmodelElement[]{};
-        };
-    }
-
-    private void deleteDuplicateRule(List<String> rules, String hostIP, String URL) {
-        Optional<String> element = rules.stream()
-                .filter(el -> el.contains(hostIP) && el.contains("MyIngress.ipv4_exact"))
-                .findFirst();
-
-        if (element.isPresent())
-            client.deleteRule(URL + Integer.toString(rules.indexOf(element.get())));
-    }
-
-    public Function<Map<String, SubmodelElement>, SubmodelElement[]> denySingleHost() {
-        return (args) -> {
-            String hostIP = (String) args.get("HostIP").getValue();
-
-            // elimino eventuali regole di forwarding per l'IP che voglio bloccare, da entrambi i controller
-            this.deleteDuplicateRule(client.getRules(ApiEnum.GETRULES_SW1.url), hostIP, ApiEnum.DELETERULES_SW1.url);
-            this.deleteDuplicateRule(client.getRules(ApiEnum.GETRULES_SW2.url), hostIP, ApiEnum.DELETERULES_SW2.url);
-
-            // Inserire sia in un controller che nell'altro, le nuove regole
-            client.postRule(ApiEnum.ADDRULE_SW1.url + "idTable=39741171&idAction=25652968", Map.of("hdr.ipv4.srcAddr", hostIP));
-            client.postRule(ApiEnum.ADDRULE_SW2.url + "idTable=39741171&idAction=25652968", Map.of("hdr.ipv4.srcAddr", hostIP));
-
-            client.postRule(ApiEnum.ADDRULE_SW1.url + "idTable=33757179&idAction=25652968", Map.of("hdr.ipv4.dstAddr", hostIP));
-            client.postRule(ApiEnum.ADDRULE_SW2.url + "idTable=33757179&idAction=25652968", Map.of("hdr.ipv4.dstAddr", hostIP));
-
-            return new SubmodelElement[]{
-                new Property("Configuration uploaded")
-            };
         };
     }
 }

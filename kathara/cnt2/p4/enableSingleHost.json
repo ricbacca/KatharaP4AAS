@@ -54,7 +54,7 @@
         ["src_mac", 48, false],
         ["src_ip", 32, false],
         ["dst_mac", 48, false],
-        ["dst_ip", 32, false]
+        ["dstAddr", 32, false]
       ]
     },
     {
@@ -699,7 +699,7 @@
       "id" : 7,
       "runtime_data" : [
         {
-          "name" : "dstAddr",
+          "name" : "src_mac",
           "bitwidth" : 48
         }
       ],
@@ -758,7 +758,7 @@
             "filename" : "enableSingleHost.p4",
             "line" : 207,
             "column" : 6,
-            "source_fragment" : "hdr.arp.src_mac = dstAddr"
+            "source_fragment" : "hdr.arp.src_mac = src_mac"
           }
         },
         {
@@ -770,14 +770,14 @@
             },
             {
               "type" : "field",
-              "value" : ["arp", "dst_ip"]
+              "value" : ["arp", "dstAddr"]
             }
           ],
           "source_info" : {
             "filename" : "enableSingleHost.p4",
             "line" : 210,
             "column" : 6,
-            "source_fragment" : "hdr.arp.src_ip = hdr.arp.dst_ip"
+            "source_fragment" : "hdr.arp.src_ip = hdr.arp.dstAddr"
           }
         },
         {
@@ -815,7 +815,7 @@
             "filename" : "enableSingleHost.p4",
             "line" : 214,
             "column" : 6,
-            "source_fragment" : "hdr.ethernet.srcAddr = dstAddr"
+            "source_fragment" : "hdr.ethernet.srcAddr = src_mac"
           }
         },
         {
@@ -1685,8 +1685,8 @@
           "key" : [
             {
               "match_type" : "exact",
-              "name" : "hdr.arp.dst_ip",
-              "target" : ["arp", "dst_ip"],
+              "name" : "hdr.arp.dstAddr",
+              "target" : ["arp", "dstAddr"],
               "mask" : null
             }
           ],

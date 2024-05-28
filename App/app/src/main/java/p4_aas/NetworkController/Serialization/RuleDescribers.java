@@ -74,6 +74,10 @@ public class RuleDescribers {
         this.actionParams = ActionParams;
     }
 
+    public String getUrlForRule() {
+        return "idTable=" + this.getTableId() + "&idAction=" + this.getActionId();
+    }
+
     @Override
     public String toString() {
         return "SwitchDescribers [tableName=" + tableName + ", tableId=" + tableId + ", keys=" + keys + ", actionName="
