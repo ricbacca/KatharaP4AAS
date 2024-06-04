@@ -22,7 +22,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operat
 
 import p4_aas.NetworkController.Utils.ApiEnum;
 import p4_aas.Submodels.AbstractSubmodel;
-import p4_aas.Submodels.Utils.Utils;
 
 /**
  * Submodel Impl for Netwok Control Plane.
@@ -31,7 +30,9 @@ public class Controller extends AbstractSubmodel {
 
     private ControllerLambda lambdaProvider;
     private final int controllerId;
+
     private Submodel createRules;
+    private Submodel rules;
 
     public Controller(int controllerNumber) {
         super();
@@ -43,16 +44,18 @@ public class Controller extends AbstractSubmodel {
     public List<Submodel> createSubmodel() {
         Submodel cntSubmodel = new Submodel();
         createRules = new Submodel();
+        rules = new Submodel();
 
 		cntSubmodel.setIdShort("Controller" + controllerId);
         createRules.setIdShort("CreateRules_CNT" + controllerId);
+        rules.setIdShort("Rules_CNT" + controllerId);
+        
         lambdaProvider.getRuleDescribers(controllerId, createRules);
 
         cntSubmodel.addSubmodelElement(getRules());
         cntSubmodel.addSubmodelElement(deleteRules());
-        cntSubmodel.addSubmodelElement(refreshRules());
 
-		return List.of(cntSubmodel, createRules);
+		return List.of(cntSubmodel, createRules, rules);
     }
 
     /*
@@ -60,22 +63,12 @@ public class Controller extends AbstractSubmodel {
      */
     private Operation getRules() {
         Operation getRules = new Operation("GetSwitchRules");
-        getRules.setOutputVariables(getUtils().getOperationVariables(Utils.GET_FIREWALL_RULES, "Output"));
+        getUtils();
+        getRules.setOutputVariables(getUtils().getOperationVariables(1, "Output"));
 
-        getRules.setWrappedInvokable(lambdaProvider.getRules(controllerId == 1 ? ApiEnum.GETRULES_SW1.url :
+        getRules.setWrappedInvokable(lambdaProvider.getRules(this.rules, controllerId == 1 ? ApiEnum.GETRULES_SW1.url :
                                                                                             ApiEnum.GETRULES_SW2.url));
         return getRules;
-    }
-
-    /**
-     * Refreshes Submodel elements into "createRules" submodel.
-     * This operation has to be called whenever someone changes Controller Program in the Switch.
-     */
-    private Operation refreshRules() {
-        Operation refreshRules = new Operation("RefreshRules");
-
-        refreshRules.setWrappedInvokable(this.lambdaProvider.refreshRules(controllerId, createRules));
-        return refreshRules;
     }
 
     /**

@@ -136,6 +136,32 @@ s1:
         - value: X.X.X.X
       action: MyIngress.drop
       actionParam:
+  - program: defaultDeny
+    rules:
+    - table: MyIngress.arp_exact
+      keys:
+        - value: 10.0.1.1
+      action: MyIngress.arp_reply
+      actionParam:
+        - 00:00:00:00:00:01
+    - table: MyIngress.arp_exact
+      keys:
+        - value: 10.0.1.2
+      action: MyIngress.arp_reply
+      actionParam:
+        - 00:00:00:00:00:01
+    - table: MyIngress.arp_exact
+      keys:
+        - value: 10.0.2.1
+      action: MyIngress.arp_reply
+      actionParam:
+        - 00:00:00:00:00:02
+    - table: MyIngress.arp_exact
+      keys:
+        - value: 10.0.2.2
+      action: MyIngress.arp_reply
+      actionParam:
+        - 00:00:00:00:00:02
 s2:
   - program: standard
     rules:
@@ -236,3 +262,17 @@ s2:
         - value: X.X.X.X
       action: MyIngress.drop
       actionParam:
+  - program: defaultDeny
+    rules:
+    - table: MyIngress.arp_exact
+      keys:
+        - value: 10.0.3.1
+      action: MyIngress.arp_reply
+      actionParam:
+        - 00:00:00:00:00:04
+    - table: MyIngress.arp_exact
+      keys:
+        - value: 10.0.3.2
+      action: MyIngress.arp_reply
+      actionParam:
+        - 00:00:00:00:00:04
