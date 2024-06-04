@@ -5,8 +5,6 @@ import (
 	"fmt"
 
 	"github.com/antoninbas/p4runtime-go-client/pkg/client"
-
-	p4_v1 "github.com/p4lang/p4runtime/go/p4/v1"
 	//log "github.com/sirupsen/logrus"
 )
 
@@ -122,46 +120,10 @@ func (sw *GrpcSwitch) GetDigests() []string {
 
 // / Create a variable of type p4_v1.TableEntry, corrisponding to the rule given by argument.
 // Uses funcions of parser.go in order to parse Keys and ActionParameters
-func CreateTableEntry(sw *GrpcSwitch, rule Rule) (*p4_v1.TableEntry, error) {
-	sw.log.Infof("REGOLAAAAAA: %v", rule)
-
-	descr := getDescriberFor(sw, rule)
-	if descr == nil {
-		return nil, fmt.Errorf("Error getting describer for rule, see log for more info")
-	}
-	sw.log.Infof("Descr: %v", descr) //
-	rule.Describer = descr
-
-	sw.log.Infof("Rule: %v", rule.Describer.Keys[0].Name)
-	interfaces := parseKeys(rule.Keys, rule.Describer.Keys, rule.Describer.Keys[0].Name)
-	sw.log.Infof("Table: %v", rule.Table)
-	sw.log.Infof("Table_Alt: %v", rule.Describer.TableName)
-	if interfaces == nil {
-		return nil, fmt.Errorf("Error parsing keys of rule, see log for more info")
-	}
-
-	parserActParam := getParserForActionParams("default")
-	sw.log.Infof("ParserAct: %v", parserActParam)
-	sw.log.Infof("Rule ActionParam: %v", rule.ActionParam)
-	sw.log.Infof("Rule Describer ActionParam: %v", rule.Describer.ActionParams)
-	actionParams := parserActParam.parse(rule.ActionParam, rule.Describer.ActionParams)
-	if actionParams == nil {
-		return nil, fmt.Errorf("Error parsing action parameters of rule, see log for more info")
-	}
-	sw.log.Infof("ActionParams: %v", actionParams)
-
-	return sw.p4RtC.NewTableEntry(
-		rule.Table,
-		interfaces,
-		sw.p4RtC.NewTableActionDirect(rule.Action, actionParams),
-		nil,
-	), nil
-}
 
 // Util function, gets all the keys of a rule and returns the parsed MatchInterfaces
 // This function was modified due to the fact that at the current state (27/10/2022) the client needs a map instead of a slice
 func parseKeys(keys []Key, describers []FieldDescriber, tableName string) map[string]client.MatchInterface {
-	fmt.Println("ARGOMENTIIIIIIIIIIIIIIIIIIIIIIIIII: ", keys, describers, tableName)
 	result := make(map[string]client.MatchInterface, len(keys))
 	//result := make([]client.MatchInterface,len(keys))
 	for idx, key := range keys {

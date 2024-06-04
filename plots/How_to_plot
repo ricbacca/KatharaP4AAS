@@ -1,0 +1,18 @@
+#README
+To plot:
+
+On server: iperf3 -s > hosthome/output (without extension)
+On client: iperf3 -c "server-ip" -u -b 0 -l "packet-length" -t 180
+
+On server:
+- while read a b sec d e f byte altro; do echo $sec $byte "0" "0"; done < hosthome/output > hosthome/result (all without extension)
+
+Now open "result" and "find-and-replace":
+	- character "-" with nothing
+	- characters " 0 0" with " # #"
+- remove junk strings from result file (on top and bottom)
+- save result file in your folder, as "input" (without extension)
+
+Go to your folder:
+- open terminal and write "gnuplot"
+- write "load grafico.plt"

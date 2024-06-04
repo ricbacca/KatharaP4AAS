@@ -131,6 +131,11 @@ s1:
         - value: X.X.X.X
       action: MyIngress.drop
       actionParam:
+    - table: MyIngress.ipv4_lpm
+      keys:
+        - value: X.X.X.X
+      action: MyIngress.drop
+      actionParam:
 s2:
   - program: standard
     rules:
@@ -222,6 +227,11 @@ s2:
       action: MyIngress.drop
       actionParam:
     - table: MyIngress.ipv4_exact
+      keys:
+        - value: X.X.X.X
+      action: MyIngress.drop
+      actionParam:
+    - table: MyIngress.ipv4_lpm
       keys:
         - value: X.X.X.X
       action: MyIngress.drop

@@ -88,5 +88,21 @@ public class App {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {}
         }
+
+        System.out.print("Waiting for CNT1 at " + StaticProperties.SW1_IP);
+        while(!client.isServerAvailable(StaticProperties.SW1_IP)) {
+            System.out.print(".");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {}
+        }
+
+        System.out.print("Waiting for CNT2 at " + StaticProperties.SW2_IP);
+        while(!client.isServerAvailable(StaticProperties.SW2_IP)) {
+            System.out.print(".");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {}
+        }
     }
 }

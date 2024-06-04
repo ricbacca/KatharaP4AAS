@@ -14,18 +14,15 @@ import p4_aas.NetworkController.NetworkController;
 import p4_aas.NetworkController.Serialization.RuleDescribers;
 import p4_aas.NetworkController.Utils.ApiEnum;
 import p4_aas.Submodels.NetworkInfrastructure.YamlParser.Rules;
-import p4_aas.Submodels.NetworkInfrastructure.YamlParser.Switches;
 import p4_aas.Submodels.NetworkInfrastructure.YamlParser.YamlParser;
 
 public class NetworkInfrastructureLambda {
     private NetworkController client;
     private YamlParser parser;
-    private List<Switches> rulesForSwitchAndProgram;
 
     public NetworkInfrastructureLambda(NetworkController client) {
         this.client = client;
         this.parser = new YamlParser();
-        this.rulesForSwitchAndProgram = this.parser.parseYaml();
     }
 
     /**
@@ -59,7 +56,7 @@ public class NetworkInfrastructureLambda {
 
             Optional<List<Rules>> filteredRules = Optional.empty();
             try {
-                filteredRules = rulesForSwitchAndProgram
+                filteredRules = this.parser.parseYaml()
                 .stream()
                 .filter(el -> el.getID().equals("s" + this.getSwitchID(args)))
                 .map(el -> el.getRules(this.getProgram(args))).findAny(); 
@@ -77,12 +74,19 @@ public class NetworkInfrastructureLambda {
         List<RuleDescribers> ruleDescribers = client.getRuleDescribers(
             switchID == 1 ? ApiEnum.RULEDESCRIBER_SW1.url : ApiEnum.RULEDESCRIBER_SW2.url);
 
-        // Se viene fornito l'host e quindi è un programma che c'entra...
+        // Se viene fornito l'host:
         // 1. Tolgo le regole di inoltro per l'host fornito
         // 2. Sostituisco nelle regole "modello" di drop, il valore "X.X.X.X" con l'host fornito (vedi metodo in Keys)
-        //    Queste regole di drop sono 2 (2 per ogni switch), una che droppa in base al SRC_IP e una con DST_IP
         if (host != null && program.equals("blockSingleHost")) {
-            filteredRules.removeIf(el -> ((el.getTable().equals("MyIngress.ipv4_exact") && (el.getKeys().equals(host)))));
+            filteredRules.removeIf(el -> el.getAction().equals("MyIngress.ipv4_forward") && el.getKeys().equals(host));
+            if (host.contains("/24")) {
+                // Se vogliamo bloccare un dominio e non un singolo host, elimino le regole di drop per singoli host
+                filteredRules.removeIf(el -> (((el.getKeys().equals("X.X.X.X")) && (el.getTable().equals("MyIngress.ipv4_exact_src"))) || 
+                                        ((el.getKeys().equals("X.X.X.X")) && (el.getTable().equals("MyIngress.ipv4_exact")))));
+            } else {
+                // Se vogliamo bloccare un singlo host, elimino la regola di drop del un dominio
+                filteredRules.removeIf(el -> ((el.getKeys().equals("X.X.X.X")) && (el.getTable().equals("MyIngress.ipv4_lpm"))));
+            }
             filteredRules.forEach(el -> el.setKeyValue(host));
         }
 
@@ -102,7 +106,7 @@ public class NetworkInfrastructureLambda {
             //       e il valore (dopo aver capito se è un mac_address o port) lo prendo dalla Rule.
             //    4. Unisco le due Map dei valori di input e invio tutto al Controller.
             if (ruleDescriber.isPresent()) {
-                String URL = ApiEnum.ADDRULE_SW1.url + ruleDescriber.get().getUrlForRule();
+                String URL = (switchID == 1 ? ApiEnum.ADDRULE_SW1.url : ApiEnum.ADDRULE_SW2.url) + ruleDescriber.get().getUrlForRule();
                 Map<String, String> inputValues = ruleDescriber.get().
                     getKeys().
                     stream().collect(Collectors.toMap(
@@ -140,9 +144,6 @@ public class NetworkInfrastructureLambda {
     }
 
     private String getHost(Map<String, SubmodelElement> args) {
-        String host = null;
-        if (args.get("Host").getValue() != null)
-            host = (String) args.get("Host").getValue();
-        return host;
+        return (String) args.get("Host").getValue();
     }
 }

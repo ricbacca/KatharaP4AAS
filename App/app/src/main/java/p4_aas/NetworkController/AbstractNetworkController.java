@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -54,9 +53,10 @@ public abstract class AbstractNetworkController {
 
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-            HttpResponse response = apacheClient.execute(httpPost);
+            CloseableHttpResponse response = apacheClient.execute(httpPost);
             statusCode = response.getStatusLine().getStatusCode();
             statusMessage = response.getStatusLine().getReasonPhrase();
+            response.close();
             httpPost.abort();
         } catch (IOException e) {
             e.printStackTrace();
