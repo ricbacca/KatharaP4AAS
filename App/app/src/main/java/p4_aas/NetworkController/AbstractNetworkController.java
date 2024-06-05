@@ -104,7 +104,7 @@ public abstract class AbstractNetworkController {
         List<String> resultList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.size(); i++) {
-            resultList.add(i + ":" + jsonArray.get(i).toString());
+            resultList.add(jsonArray.get(i).toString());
         }
 
         return resultList;

@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.math.*;
 
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
@@ -15,13 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import p4_aas.NetworkController.NetworkController;
 import p4_aas.NetworkController.Serialization.RuleDescribers;
-import p4_aas.NetworkController.Serialization.Rules;
 import p4_aas.NetworkController.Utils.ApiEnum;
 import p4_aas.Submodels.Utils.Utils;
 
@@ -34,28 +30,21 @@ public class ControllerLambda {
         this.utils = utils;
     }
 
-    public Function<Map<String, SubmodelElement>, SubmodelElement[]> getRules(Submodel rules, String url) {
+    public Function<Map<String, SubmodelElement>, SubmodelElement[]> getRules(String url) {
         return (args) -> {
-            this.parseRulesAddSubmodels(client.getRequest(url), rules);
+            List<SubmodelElement> finalRes = new LinkedList<>();
 
-            return new SubmodelElement[] {
-                new Property("Operation completed")
-            };
+            client.getRules(url).forEach(el -> {
+                finalRes.add(this.createProperty("Rule" , el));
+            });
+            return finalRes.toArray(new SubmodelElement[finalRes.size()]);
         };
     }
 
-    private void parseRulesAddSubmodels(String rules, Submodel sub) {
-        try {
-            List<Rules> parsedRules = new ObjectMapper().readValue(rules, new TypeReference<List<Rules>>(){});
-
-            parsedRules.forEach(rl -> {
-                sub.addSubmodelElement(new Property(
-                    "" + parsedRules.indexOf(rl) + "-" + rl.getTable().replace("MyIngress.", "") + ":" + rl.getAction().replace("MyIngress.", "") , 
-                    rl.getKeys().toString() + "-[ActionParams " + rl.getActionParam().toString() + "]"));
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+    private SubmodelElement createProperty(String idShort, Object value) {
+        SubmodelElement el = new Property(idShort, value);
+        el.setKind(ModelingKind.TEMPLATE);
+        return el;
     }
 
     public Function<Map<String, SubmodelElement>, SubmodelElement[]> deleteRules(String url) {
