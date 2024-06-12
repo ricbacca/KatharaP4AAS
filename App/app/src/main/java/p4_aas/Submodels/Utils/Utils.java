@@ -26,7 +26,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 
 public class Utils {
-    public static final int GET_FIREWALL_RULES = 20;
+    public static final int GET_FIREWALL_RULES = 15;
 
     /**
      * @param values Map of String and ValueType (String, Integer, Boolean)

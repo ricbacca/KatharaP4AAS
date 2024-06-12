@@ -418,7 +418,7 @@
       "name" : "deparser",
       "id" : 0,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 388,
         "column" : 8,
         "source_fragment" : "MyDeparser"
@@ -434,7 +434,7 @@
       "name" : "MyIngress.payload_data",
       "id" : 0,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 193,
         "column" : 27,
         "source_fragment" : "payload_data"
@@ -446,7 +446,7 @@
       "name" : "MyEgress.packet_processing_time_array",
       "id" : 1,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 306,
         "column" : 28,
         "source_fragment" : "packet_processing_time_array"
@@ -458,7 +458,7 @@
       "name" : "MyEgress.packet_enqueuing_time_array",
       "id" : 2,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 307,
         "column" : 28,
         "source_fragment" : "packet_enqueuing_time_array"
@@ -470,7 +470,7 @@
       "name" : "MyEgress.packet_enqueuing_depth_array",
       "id" : 3,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 308,
         "column" : 28,
         "source_fragment" : "packet_enqueuing_depth_array"
@@ -482,7 +482,7 @@
       "name" : "MyEgress.packet_dequeuing_timedelta_array",
       "id" : 4,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 309,
         "column" : 28,
         "source_fragment" : "packet_dequeuing_timedelta_array"
@@ -494,7 +494,7 @@
       "name" : "MyEgress.packet_dequeuing_depth_array",
       "id" : 5,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 310,
         "column" : 28,
         "source_fragment" : "packet_dequeuing_depth_array"
@@ -506,7 +506,7 @@
       "name" : "MyEgress.timestamp_last_seen_packet",
       "id" : 6,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 312,
         "column" : 25,
         "source_fragment" : "timestamp_last_seen_packet"
@@ -518,7 +518,7 @@
       "name" : "MyEgress.last_saved_index",
       "id" : 7,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 313,
         "column" : 25,
         "source_fragment" : "last_saved_index"
@@ -532,7 +532,7 @@
       "name" : "calc",
       "id" : 0,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 365,
         "column" : 5,
         "source_fragment" : "update_checksum( ..."
@@ -620,7 +620,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 196,
             "column" : 8,
             "source_fragment" : "mark_to_drop(standard_metadata)"
@@ -642,7 +642,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 196,
             "column" : 8,
             "source_fragment" : "mark_to_drop(standard_metadata)"
@@ -664,7 +664,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 196,
             "column" : 8,
             "source_fragment" : "mark_to_drop(standard_metadata)"
@@ -686,7 +686,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 196,
             "column" : 8,
             "source_fragment" : "mark_to_drop(standard_metadata)"
@@ -717,7 +717,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 18,
             "column" : 26,
             "source_fragment" : "2; //Operation 2 is reply ..."
@@ -736,7 +736,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 204,
             "column" : 6,
             "source_fragment" : "hdr.arp.dst_mac = hdr.arp.src_mac"
@@ -755,7 +755,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 207,
             "column" : 6,
             "source_fragment" : "hdr.arp.src_mac = src_mac"
@@ -774,7 +774,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 210,
             "column" : 6,
             "source_fragment" : "hdr.arp.src_ip = hdr.arp.dstAddr"
@@ -793,7 +793,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 213,
             "column" : 6,
             "source_fragment" : "hdr.ethernet.dstAddr = hdr.ethernet.srcAddr"
@@ -812,7 +812,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 214,
             "column" : 6,
             "source_fragment" : "hdr.ethernet.srcAddr = src_mac"
@@ -831,7 +831,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 217,
             "column" : 6,
             "source_fragment" : "standard_metadata.egress_spec = standard_metadata.ingress_port"
@@ -866,7 +866,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 226,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = port"
@@ -885,7 +885,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 227,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.srcAddr = hdr.ethernet.dstAddr"
@@ -904,7 +904,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 228,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.dstAddr = dstAddr"
@@ -946,7 +946,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 229,
             "column" : 8,
             "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
@@ -981,7 +981,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 226,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = port"
@@ -1000,7 +1000,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 227,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.srcAddr = hdr.ethernet.dstAddr"
@@ -1019,7 +1019,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 228,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.dstAddr = dstAddr"
@@ -1061,7 +1061,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 229,
             "column" : 8,
             "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
@@ -1096,7 +1096,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 226,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = port"
@@ -1115,7 +1115,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 227,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.srcAddr = hdr.ethernet.dstAddr"
@@ -1134,7 +1134,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 228,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.dstAddr = dstAddr"
@@ -1176,7 +1176,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 229,
             "column" : 8,
             "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
@@ -1185,7 +1185,7 @@
       ]
     },
     {
-      "name" : "enableSingleHost294",
+      "name" : "defaultDeny294",
       "id" : 11,
       "runtime_data" : [],
       "primitives" : [
@@ -1198,7 +1198,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 294,
             "column" : 10,
             "source_fragment" : "mark_to_drop(standard_metadata)"
@@ -1207,7 +1207,7 @@
       ]
     },
     {
-      "name" : "enableSingleHost350",
+      "name" : "defaultDeny350",
       "id" : 12,
       "runtime_data" : [],
       "primitives" : [
@@ -1228,7 +1228,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 350,
             "column" : 16,
             "source_fragment" : "last_saved_index.write(0, 0)"
@@ -1237,7 +1237,7 @@
       ]
     },
     {
-      "name" : "enableSingleHost325",
+      "name" : "defaultDeny325",
       "id" : 13,
       "runtime_data" : [],
       "primitives" : [
@@ -1258,7 +1258,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 325,
             "column" : 12,
             "source_fragment" : "last_saved_index.read(current_index, 0)"
@@ -1300,7 +1300,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 329,
             "column" : 16,
             "source_fragment" : "standard_metadata.egress_global_timestamp-standard_metadata.ingress_global_timestamp"
@@ -1323,7 +1323,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 328,
             "column" : 12,
             "source_fragment" : "packet_processing_time_array.write(current_index, ..."
@@ -1346,7 +1346,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 332,
             "column" : 12,
             "source_fragment" : "packet_enqueuing_time_array.write(current_index, ..."
@@ -1369,7 +1369,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 336,
             "column" : 12,
             "source_fragment" : "packet_enqueuing_depth_array.write(current_index, ..."
@@ -1392,7 +1392,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 340,
             "column" : 12,
             "source_fragment" : "packet_dequeuing_timedelta_array.write(current_index, ..."
@@ -1415,7 +1415,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 344,
             "column" : 12,
             "source_fragment" : "packet_dequeuing_depth_array.write(current_index, ..."
@@ -1457,7 +1457,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 348,
             "column" : 38,
             "source_fragment" : "current_index + 1"
@@ -1480,7 +1480,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 348,
             "column" : 12,
             "source_fragment" : "last_saved_index.write(0, current_index + 1)"
@@ -1489,7 +1489,7 @@
       ]
     },
     {
-      "name" : "enableSingleHost354",
+      "name" : "defaultDeny354",
       "id" : 14,
       "runtime_data" : [],
       "primitives" : [
@@ -1510,7 +1510,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 354,
             "column" : 12,
             "source_fragment" : "timestamp_last_seen_packet.write(0, standard_metadata.ingress_global_timestamp)"
@@ -1519,7 +1519,7 @@
       ]
     },
     {
-      "name" : "enableSingleHost320",
+      "name" : "defaultDeny320",
       "id" : 15,
       "runtime_data" : [],
       "primitives" : [
@@ -1540,7 +1540,7 @@
             }
           ],
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 320,
             "column" : 8,
             "source_fragment" : "timestamp_last_seen_packet.read(last_time, 0)"
@@ -1554,7 +1554,7 @@
       "name" : "ingress",
       "id" : 0,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 187,
         "column" : 8,
         "source_fragment" : "MyIngress"
@@ -1565,7 +1565,7 @@
           "name" : "MyIngress.ipv4_exact_src",
           "id" : 0,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 257,
             "column" : 10,
             "source_fragment" : "ipv4_exact_src"
@@ -1602,7 +1602,7 @@
           "name" : "MyIngress.ipv4_exact",
           "id" : 1,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 244,
             "column" : 10,
             "source_fragment" : "ipv4_exact"
@@ -1639,7 +1639,7 @@
           "name" : "MyIngress.ipv4_lpm",
           "id" : 2,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 270,
             "column" : 10,
             "source_fragment" : "ipv4_lpm"
@@ -1677,7 +1677,7 @@
           "name" : "MyIngress.arp_exact",
           "id" : 3,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 232,
             "column" : 10,
             "source_fragment" : "arp_exact"
@@ -1711,10 +1711,10 @@
           }
         },
         {
-          "name" : "tbl_enableSingleHost294",
+          "name" : "tbl_defaultDeny294",
           "id" : 4,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 294,
             "column" : 10,
             "source_fragment" : "mark_to_drop(standard_metadata)"
@@ -1727,10 +1727,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [11],
-          "actions" : ["enableSingleHost294"],
+          "actions" : ["defaultDeny294"],
           "base_default_next" : null,
           "next_tables" : {
-            "enableSingleHost294" : null
+            "defaultDeny294" : null
           },
           "default_entry" : {
             "action_id" : 11,
@@ -1746,7 +1746,7 @@
           "name" : "node_2",
           "id" : 0,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 284,
             "column" : 12,
             "source_fragment" : "hdr.ipv4.isValid()"
@@ -1769,7 +1769,7 @@
           "name" : "node_6",
           "id" : 1,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 290,
             "column" : 19,
             "source_fragment" : "hdr.ethernet.etherType == TYPE_ARP"
@@ -1789,7 +1789,7 @@
             }
           },
           "true_next" : "MyIngress.arp_exact",
-          "false_next" : "tbl_enableSingleHost294"
+          "false_next" : "tbl_defaultDeny294"
         }
       ]
     },
@@ -1797,18 +1797,18 @@
       "name" : "egress",
       "id" : 1,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 303,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
-      "init_table" : "tbl_enableSingleHost320",
+      "init_table" : "tbl_defaultDeny320",
       "tables" : [
         {
-          "name" : "tbl_enableSingleHost320",
+          "name" : "tbl_defaultDeny320",
           "id" : 5,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 320,
             "column" : 8,
             "source_fragment" : "timestamp_last_seen_packet.read(last_time, 0)"
@@ -1821,10 +1821,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [15],
-          "actions" : ["enableSingleHost320"],
+          "actions" : ["defaultDeny320"],
           "base_default_next" : "node_12",
           "next_tables" : {
-            "enableSingleHost320" : "node_12"
+            "defaultDeny320" : "node_12"
           },
           "default_entry" : {
             "action_id" : 15,
@@ -1834,10 +1834,10 @@
           }
         },
         {
-          "name" : "tbl_enableSingleHost325",
+          "name" : "tbl_defaultDeny325",
           "id" : 6,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 325,
             "column" : 12,
             "source_fragment" : "last_saved_index.read(current_index, 0); ..."
@@ -1850,10 +1850,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [13],
-          "actions" : ["enableSingleHost325"],
+          "actions" : ["defaultDeny325"],
           "base_default_next" : "node_14",
           "next_tables" : {
-            "enableSingleHost325" : "node_14"
+            "defaultDeny325" : "node_14"
           },
           "default_entry" : {
             "action_id" : 13,
@@ -1863,10 +1863,10 @@
           }
         },
         {
-          "name" : "tbl_enableSingleHost350",
+          "name" : "tbl_defaultDeny350",
           "id" : 7,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 350,
             "column" : 16,
             "source_fragment" : "last_saved_index.write(0, 0)"
@@ -1879,10 +1879,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [12],
-          "actions" : ["enableSingleHost350"],
-          "base_default_next" : "tbl_enableSingleHost354",
+          "actions" : ["defaultDeny350"],
+          "base_default_next" : "tbl_defaultDeny354",
           "next_tables" : {
-            "enableSingleHost350" : "tbl_enableSingleHost354"
+            "defaultDeny350" : "tbl_defaultDeny354"
           },
           "default_entry" : {
             "action_id" : 12,
@@ -1892,10 +1892,10 @@
           }
         },
         {
-          "name" : "tbl_enableSingleHost354",
+          "name" : "tbl_defaultDeny354",
           "id" : 8,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 354,
             "column" : 12,
             "source_fragment" : "timestamp_last_seen_packet.write(0, standard_metadata.ingress_global_timestamp)"
@@ -1908,10 +1908,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [14],
-          "actions" : ["enableSingleHost354"],
+          "actions" : ["defaultDeny354"],
           "base_default_next" : null,
           "next_tables" : {
-            "enableSingleHost354" : null
+            "defaultDeny354" : null
           },
           "default_entry" : {
             "action_id" : 14,
@@ -1927,7 +1927,7 @@
           "name" : "node_12",
           "id" : 2,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 323,
             "column" : 12,
             "source_fragment" : "diff_time > (bit<48>)55000"
@@ -1967,13 +1967,13 @@
             }
           },
           "false_next" : null,
-          "true_next" : "tbl_enableSingleHost325"
+          "true_next" : "tbl_defaultDeny325"
         },
         {
           "name" : "node_14",
           "id" : 3,
           "source_info" : {
-            "filename" : "enableSingleHost.p4",
+            "filename" : "defaultDeny.p4",
             "line" : 349,
             "column" : 15,
             "source_fragment" : "current_index + 1 > 999"
@@ -2012,8 +2012,8 @@
               }
             }
           },
-          "true_next" : "tbl_enableSingleHost350",
-          "false_next" : "tbl_enableSingleHost354"
+          "true_next" : "tbl_defaultDeny350",
+          "false_next" : "tbl_defaultDeny354"
         }
       ]
     }
@@ -2023,7 +2023,7 @@
       "name" : "cksum",
       "id" : 0,
       "source_info" : {
-        "filename" : "enableSingleHost.p4",
+        "filename" : "defaultDeny.p4",
         "line" : 365,
         "column" : 5,
         "source_fragment" : "update_checksum( ..."
@@ -2086,7 +2086,7 @@
       ["standard_metadata", "priority"]
     ]
   ],
-  "program" : "./enableSingleHost.p4i",
+  "program" : "./defaultDeny.p4i",
   "__meta__" : {
     "version" : [2, 23],
     "compiler" : "https://github.com/p4lang/p4c"

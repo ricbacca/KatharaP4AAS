@@ -33,10 +33,12 @@ public class ControllerLambda {
     public Function<Map<String, SubmodelElement>, SubmodelElement[]> getRules(String url) {
         return (args) -> {
             List<SubmodelElement> finalRes = new LinkedList<>();
+            List<String> actualRules = client.getRules(url);
 
-            client.getRules(url).forEach(el -> {
-                finalRes.add(this.createProperty("Rule" , el));
+            actualRules.forEach(el -> {
+                finalRes.add(this.createProperty("Rule_" + actualRules.indexOf(el), el));
             });
+
             return finalRes.toArray(new SubmodelElement[finalRes.size()]);
         };
     }
