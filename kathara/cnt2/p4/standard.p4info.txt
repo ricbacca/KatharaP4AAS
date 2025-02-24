@@ -134,20 +134,16 @@ actions {
     bitwidth: 9
   }
 }
-registers {
+counters {
   preamble {
-    id: 378360365
-    name: "MyIngress.payload_data"
-    alias: "payload_data"
+    id: 315478639
+    name: "MyIngress.c"
+    alias: "c"
   }
-  type_spec {
-    bitstring {
-      bit {
-        bitwidth: 2048
-      }
-    }
+  spec {
+    unit: PACKETS
   }
-  size: 1
+  size: 64
 }
 registers {
   preamble {

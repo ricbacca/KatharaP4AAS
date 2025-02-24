@@ -1,12 +1,15 @@
 package p4_aas.Submodels.NetworkInfrastructure;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
@@ -127,6 +130,34 @@ public class NetworkInfrastructureLambda {
         });
     }
 
+    public Function<Map<String, SubmodelElement>, SubmodelElement[]> getCounters() {
+        return (args) -> {
+            Map<Integer, Pair<Integer, Integer>> result = new HashMap<>();
+            Integer Switch = this.getSwitchID(args);
+            List<Integer> Ports = this.getPorts(args);
+
+            if (Switch == 1)
+                result = this.client.getPacketCounts(ApiEnum.PACKET_COUNTER_SW1.url);
+            else if (Switch == 2)
+                result = this.client.getPacketCounts(ApiEnum.PACKET_COUNTER_SW2.url);
+
+            result.entrySet().removeIf(entry -> !Ports.contains(entry.getKey()));
+
+            return new SubmodelElement[]{
+                new Property(printCounters(result))
+            };
+        };
+    }
+
+    private String printCounters(Map<Integer, Pair<Integer, Integer>> result) {
+        StringBuilder sb = new StringBuilder("");
+        result.forEach((k,v) -> {
+            sb.append("Port:" + k + " -> (" + v.getLeft() + "p," + v.getRight() + "b) || ");
+        });
+
+        return sb.toString();
+    }
+
     private void changeSwitchProgram(int switchId, String program) {
         String URL = (switchId == 1 ?
             ApiEnum.CHANGEPROGRAM_SW1.url :
@@ -137,6 +168,23 @@ public class NetworkInfrastructureLambda {
 
     private int getSwitchID(Map<String, SubmodelElement> args) {
         return ((BigInteger) args.get("Switch").getValue()).intValue();
+    }
+
+    private List<Integer> getPorts(Map<String, SubmodelElement> args) {
+        String ports = (String) args.get("Ports").getValue();
+        String[] s1 = ports
+            .replaceAll("\\[", "")
+            .replaceAll("]", "")
+            .replaceAll(" ", "")
+            .split(",");
+
+        List<Integer> arr = new LinkedList<>();
+
+        for (int i = 0; i < s1.length; i++) {
+            arr.add(Integer.valueOf(s1[i]));
+        }
+
+        return arr;
     }
 
     private String getProgram(Map<String, SubmodelElement> args) {

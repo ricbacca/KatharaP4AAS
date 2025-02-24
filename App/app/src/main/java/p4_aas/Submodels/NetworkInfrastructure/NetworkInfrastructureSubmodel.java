@@ -41,6 +41,7 @@ public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
         swPrograms.addSubmodelElement(getRunningProgram());
         swPrograms.addSubmodelElement(setProgram());
         swPrograms.addSubmodelElement(description());
+        swPrograms.addSubmodelElement(getMessageCounters());
 
 		return List.of(swPrograms);
 	}
@@ -89,5 +90,21 @@ public class NetworkInfrastructureSubmodel extends AbstractSubmodel {
         setProgram.setWrappedInvokable(lambdaProvider.changeProgram());
 
         return setProgram;
+    }
+
+    /**
+     * Operation into SwPrograms submodel.
+     * Input: Switch numer (1 or 2).
+     * Input: Switch port
+     * Output: current message and bytes transferred in that port
+     */
+    private Operation getMessageCounters() {
+        Operation getCounters = new Operation("GetCounters");
+
+        getCounters.setInputVariables(getUtils().getCustomInputVariables(Map.of("Switch", ValueType.Integer, "Ports", ValueType.String)));
+        getCounters.setOutputVariables(getUtils().getOperationVariables(1, "output"));
+        getCounters.setWrappedInvokable(lambdaProvider.getCounters());
+
+        return getCounters;
     }
 }

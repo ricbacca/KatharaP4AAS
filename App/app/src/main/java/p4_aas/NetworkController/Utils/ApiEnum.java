@@ -55,7 +55,11 @@ public enum ApiEnum {
 
     IPV4_LPM_RULE_SW1(ADDRULE_SW1.url + "idTable=33757179&idAction=28792405"),
 
-    IPV4_LPM_RULE_SW2(ADDRULE_SW2.url + "idTable=33757179&idAction=28792405");
+    IPV4_LPM_RULE_SW2(ADDRULE_SW2.url + "idTable=33757179&idAction=28792405"),
+
+    PACKET_COUNTER_SW1(StaticProperties.SW1_IP + "/getCounters?switch=s1&counter=MyIngress.c"),
+    
+    PACKET_COUNTER_SW2(StaticProperties.SW2_IP + "/getCounters?switch=s2&counter=MyIngress.c");
 
     public final String url;
 

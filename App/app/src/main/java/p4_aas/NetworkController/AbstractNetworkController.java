@@ -78,8 +78,11 @@ public abstract class AbstractNetworkController {
         CloseableHttpResponse resp;
         try {
             resp = this.apacheClient.execute(new HttpGet(URL));
+            System.out.println("URL: " + URL);
+            System.out.println("RISULTATO: " + resp.getEntity());
             result = EntityUtils.toString(resp.getEntity());
             statusCode = resp.getStatusLine().getStatusCode();
+            System.out.println("RISULTATO: " + resp.getEntity());
             statusMessage = resp.getStatusLine().getReasonPhrase();
             resp.close();
         } catch (IOException e) {
@@ -95,8 +98,6 @@ public abstract class AbstractNetworkController {
 
         return result;
     }
-
-
 
     public List<String> jsonToList(String json) {
         Gson gson = new Gson();

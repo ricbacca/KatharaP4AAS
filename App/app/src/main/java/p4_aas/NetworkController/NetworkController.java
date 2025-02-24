@@ -16,10 +16,12 @@ package p4_aas.NetworkController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpResponseException;
@@ -30,6 +32,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import p4_aas.NetworkController.Serialization.RuleDescribers;
 
@@ -47,6 +51,19 @@ public class NetworkController extends AbstractNetworkController {
         resultList = this.jsonToList(this.getRequest(URL));
 
         return resultList;
+    }
+
+    public Map<Integer, Pair<Integer, Integer>> getPacketCounts(String URL) {
+        List<Map<String, Integer>> tempList = new Gson().fromJson(this.getRequest(URL), new TypeToken<List<Map<String, Integer>>>() {}.getType());
+        Map<Integer, Pair<Integer, Integer>> finalMap = new HashMap<>();
+
+        for (int i = 0; i < tempList.size(); i++) {
+            Map<String, Integer> values = tempList.get(i);
+
+            finalMap.put(i, Pair.of(values.getOrDefault("packet_count", 0), values.getOrDefault("byte_count", 0)));
+        }
+
+        return finalMap;
     }
 
     public void deleteRule(String URL) {

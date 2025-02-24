@@ -1071,11 +1071,10 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
-
-
-    register<bit<2048>>(1) payload_data;
+    counter(64, CounterType.packets) c;
 
     action drop() {
+        c.count((bit<32>) standard_metadata.ingress_port);
         mark_to_drop(standard_metadata);
     }
 
@@ -1106,6 +1105,7 @@ control MyIngress(inout headers hdr,
     }
 
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
+        c.count((bit<32>) standard_metadata.ingress_port);
         standard_metadata.egress_spec = port;
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
         hdr.ethernet.dstAddr = dstAddr;

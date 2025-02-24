@@ -44,6 +44,17 @@ type SwitchConfig struct {
 	Digest  []string
 }
 
+func (sw *GrpcSwitch) GetCounters(ctx context.Context, counterName string) []*p4_v1.CounterData {
+	if counterName == "" {
+		counterName = "MyIngress.c"
+	}
+	counterData, err := sw.p4RtC.ReadCounterEntryWildcard(ctx, counterName)
+	if err != nil {
+		return nil
+	}
+	return counterData
+}
+
 // Return rules actually installed into the switch, supposing controller is the only one who can add rules, so returns only rules added by controller
 func (sw *GrpcSwitch) GetInstalledRules() []Rule {
 	config, err := sw.GetConfig()

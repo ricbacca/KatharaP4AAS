@@ -69,6 +69,7 @@ func StartServer(sw *p4switch.GrpcSwitch, topology string, ctx_dummy context.Con
 	http.HandleFunc("/executeProgram", executeProgram)
 	http.HandleFunc("/topology", getTopology)
 	http.HandleFunc("/getTopologyData", getTopologyData)
+	http.HandleFunc("/getCounters", getCounters)
 
 	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir(serverPath+"web"))))
 
@@ -80,6 +81,28 @@ func StartServer(sw *p4switch.GrpcSwitch, topology string, ctx_dummy context.Con
 		log.Errorf("Error starting server: %s\n", err)
 		os.Exit(1)
 	}
+}
+
+func getCounters(w http.ResponseWriter, r *http.Request) {
+	swName := r.URL.Query().Get("switch")
+	counterName := r.URL.Query().Get("counter")
+
+	// Getting gRPC switch by name passed in URL
+	sw := getSwitchByName(swName)
+	if sw == nil {
+		errorMessage = "Failed to add entry: switch not found"
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	jsonData, err := json.Marshal(sw.GetCounters(ctx, counterName))
+	if err != nil {
+		http.Error(w, "Errore durante la codifica JSON", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonData)
 }
 
 func getRules(w http.ResponseWriter, r *http.Request) {

@@ -2,8 +2,9 @@ package p4switch
 
 import (
 	"context"
-	"github.com/antoninbas/p4runtime-go-client/pkg/client"
 	"fmt"
+
+	"github.com/antoninbas/p4runtime-go-client/pkg/client"
 
 	p4_v1 "github.com/p4lang/p4runtime/go/p4/v1"
 	//log "github.com/sirupsen/logrus"
@@ -13,7 +14,7 @@ type Rule struct {
 	Table       string
 	Keys        []Key
 	Action      string
-	ActionParam []string `yaml:"action_param"` 
+	ActionParam []string `yaml:"action_param"`
 	Describer   *RuleDescriber
 }
 
@@ -44,6 +45,17 @@ type SwitchConfig struct {
 	Digest  []string
 }
 
+func (sw *GrpcSwitch) GetCounters(ctx context.Context, counterName string) []*p4_v1.CounterData {
+	if counterName == "" {
+		counterName = "MyIngress.c"
+	}
+	counterData, err := sw.p4RtC.ReadCounterEntryWildcard(ctx, counterName)
+	if err != nil {
+		return nil
+	}
+	return counterData
+}
+
 // Return rules actually installed into the switch, supposing controller is the only one who can add rules, so returns only rules added by controller
 func (sw *GrpcSwitch) GetInstalledRules() []Rule {
 	config, err := sw.GetConfig()
@@ -55,13 +67,13 @@ func (sw *GrpcSwitch) GetInstalledRules() []Rule {
 }
 
 // Adds a new rule into the switch, both in the array containg the installed rules and in the switch sw
-func (sw *GrpcSwitch) AddRule(ctx context.Context,rule Rule) error {
+func (sw *GrpcSwitch) AddRule(ctx context.Context, rule Rule) error {
 	entry, err := CreateTableEntry(sw, rule)
 	if err != nil {
 		return err
 	}
 
-	if err := sw.AddTableEntry(ctx,entry); err != nil {
+	if err := sw.AddTableEntry(ctx, entry); err != nil {
 		return err
 	}
 
@@ -75,7 +87,7 @@ func (sw *GrpcSwitch) AddRule(ctx context.Context,rule Rule) error {
 }
 
 // Removes the rule at index "idx" from the switch, both from the array containg the installed rules and from the switch sw
-func (sw *GrpcSwitch) RemoveRule(ctx context.Context,idx int) error {
+func (sw *GrpcSwitch) RemoveRule(ctx context.Context, idx int) error {
 	if idx < 0 || idx >= len(sw.config.Rules) {
 		return fmt.Errorf("index not valid")
 	}
@@ -87,7 +99,7 @@ func (sw *GrpcSwitch) RemoveRule(ctx context.Context,idx int) error {
 		return err
 	}
 
-	if err := sw.RemoveTableEntry(ctx,entry); err != nil {
+	if err := sw.RemoveTableEntry(ctx, entry); err != nil {
 		return err
 	}
 
@@ -119,7 +131,7 @@ func (sw *GrpcSwitch) GetDigests() []string {
 	return config.Digest
 }
 
-/// Create a variable of type p4_v1.TableEntry, corrisponding to the rule given by argument.
+// / Create a variable of type p4_v1.TableEntry, corrisponding to the rule given by argument.
 // Uses funcions of parser.go in order to parse Keys and ActionParameters
 func CreateTableEntry(sw *GrpcSwitch, rule Rule) (*p4_v1.TableEntry, error) {
 
@@ -127,9 +139,9 @@ func CreateTableEntry(sw *GrpcSwitch, rule Rule) (*p4_v1.TableEntry, error) {
 	if descr == nil {
 		return nil, fmt.Errorf("Error getting describer for rule, see log for more info")
 	}
-	sw.log.Infof("Descr: %v",descr) //
+	sw.log.Infof("Descr: %v", descr) //
 	rule.Describer = descr
-	
+
 	sw.log.Infof("Rule: %v", rule.Describer.Keys[0].Name)
 	interfaces := parseKeys(rule.Keys, rule.Describer.Keys, rule.Describer.Keys[0].Name)
 	sw.log.Infof("Table: %v", rule.Table)
@@ -137,7 +149,7 @@ func CreateTableEntry(sw *GrpcSwitch, rule Rule) (*p4_v1.TableEntry, error) {
 	if interfaces == nil {
 		return nil, fmt.Errorf("Error parsing keys of rule, see log for more info")
 	}
-	
+
 	parserActParam := getParserForActionParams("default")
 	sw.log.Infof("ParserAct: %v", parserActParam)
 	actionParams := parserActParam.parse(rule.ActionParam, rule.Describer.ActionParams)
@@ -170,4 +182,3 @@ func parseKeys(keys []Key, describers []FieldDescriber, tableName string) map[st
 	}
 	return result
 }
-
