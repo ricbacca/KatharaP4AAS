@@ -15,8 +15,9 @@
 package p4_aas.NetworkController;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpResponseException;
@@ -30,6 +31,10 @@ import org.apache.http.util.EntityUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+
+import p4_aas.NetworkController.Serialization.JsonObject;
+
 public abstract class AbstractNetworkController {
     protected static final int HTTP_OK = 200;
     CloseableHttpClient apacheClient;
@@ -99,15 +104,34 @@ public abstract class AbstractNetworkController {
         return result;
     }
 
-    public List<String> jsonToList(String json) {
+    public List<String> jsonToList(String jsonString) {
         Gson gson = new Gson();
-        JsonArray jsonArray = gson.fromJson(json, JsonArray.class);
-        List<String> resultList = new ArrayList<>();
+        JsonArray jsonArray = gson.fromJson(jsonString, JsonArray.class);
 
-        for (int i = 0; i < jsonArray.size(); i++) {
-            resultList.add(jsonArray.get(i).toString());
-        }
+        return StreamSupport.stream(jsonArray.spliterator(), false)
+                .map(JsonElement::toString)  // Converte ogni elemento del JsonArray in stringa
+                .map(el -> {
+                    String[] parts = el.split("->");
+                    String index = parts[0].trim();  // Estrae l'indice
+                    String jsonData = parts[1];     // Estrae il JSON vero e proprio
 
-        return resultList;
+                    // Trasforma il JSON in formato richiesto
+                    return index + " -> " + transformJson(jsonData);
+                })
+                .collect(Collectors.toList());
+    }
+
+    private static String transformJson(String jsonString) {
+        Gson gson = new Gson();
+        JsonObject json = gson.fromJson(jsonString, JsonObject.class);
+
+        String table = json.Table.split("\\.")[1];
+        String ip = json.Keys[0].Value;
+        String action = json.Action.split("\\.")[1];
+        String macAddress = json.ActionParam[0];
+        String port = json.ActionParam[1];
+
+        return String.format("[Table: %s]-[Ip: %s]-[Action: %s]-[DestinationPort: %s]-[DestinationMacAddress: %s]",
+                table, ip, action, port, macAddress);
     }
 }
