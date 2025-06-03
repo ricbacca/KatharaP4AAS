@@ -4,6 +4,10 @@ IGNITE 5.0 Project - Unibo 2024/2025.
 
 Work in progress.
 
+## Requirements:
+1. Gradle at least 8.0.2
+2. Default-JDK installed, at least 21.x
+
 ## To start up:
 1. Goes to "App" folder and execute "gradle build". Verify that in folder "kathara/aas_project/" there must be a Jar called P4_AAS.jar.
 2. If everything ok: Launch Kathara inside folder "kathara/": kathara lstart
